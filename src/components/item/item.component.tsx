@@ -1,15 +1,26 @@
 import { Button, ButtonGroup, Card, CardContent, Typography } from '@mui/material';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 export interface ItemProps {
+    id: number;
     name: string;
     description: string;
     calculation: (quantity: number) => number;
+    updateScore: (id: string, score: number) => void;
 }
 
 const Item: FC<ItemProps> = (props: ItemProps) => {
+    const { id, name, description, calculation, updateScore } = props;
+
     const [quantity, setQuantity] = useState(0);
-    const { name, description, calculation } = props;
+
+    useEffect(() => {
+        updateScore(id.toString(), calculation(quantity));
+    }, [quantity]);
+
+    const updateQuantity = (delta: number): void => {
+        setQuantity(quantity + delta);
+    };
 
     return (
         <Card variant="outlined">
@@ -29,10 +40,10 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
                             onChange={e => setQuantity(Number(e.target.value))}
                         />
                         <ButtonGroup variant="contained" size="small">
-                            <Button color="error" disabled={quantity <= 0} onClick={() => setQuantity(quantity - 1)}>
+                            <Button color="error" disabled={quantity <= 0} onClick={() => updateQuantity(-1)}>
                                 -
                             </Button>
-                            <Button color="success" onClick={() => setQuantity(quantity + 1)}>
+                            <Button color="success" onClick={() => updateQuantity(1)}>
                                 +
                             </Button>
                         </ButtonGroup>
