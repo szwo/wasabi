@@ -2546,7 +2546,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.5.0":
+"@typescript-eslint/eslint-plugin@npm:^5.5.0, @typescript-eslint/eslint-plugin@npm:^5.9.0":
   version: 5.9.0
   resolution: "@typescript-eslint/eslint-plugin@npm:5.9.0"
   dependencies:
@@ -2585,7 +2585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.5.0":
+"@typescript-eslint/parser@npm:^5.5.0, @typescript-eslint/parser@npm:^5.9.0":
   version: 5.9.0
   resolution: "@typescript-eslint/parser@npm:5.9.0"
   dependencies:
@@ -5106,6 +5106,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-config-prettier@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "eslint-config-prettier@npm:8.3.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  bin:
+    eslint-config-prettier: bin/cli.js
+  checksum: df4cea3032671995bb5ab07e016169072f7fa59f44a53251664d9ca60951b66cdc872683b5c6a3729c91497c11490ca44a79654b395dd6756beb0c3903a37196
+  languageName: node
+  linkType: hard
+
 "eslint-config-react-app@npm:^7.0.0":
   version: 7.0.0
   resolution: "eslint-config-react-app@npm:7.0.0"
@@ -5331,7 +5342,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.3.0":
+"eslint@npm:^8.3.0, eslint@npm:^8.6.0":
   version: 8.6.0
   resolution: "eslint@npm:8.6.0"
   dependencies:
@@ -11341,7 +11352,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.4.2":
+"typescript@npm:^4.5.4":
   version: 4.5.4
   resolution: "typescript@npm:4.5.4"
   bin:
@@ -11351,7 +11362,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>":
+"typescript@patch:typescript@^4.5.4#~builtin<compat/typescript>":
   version: 4.5.4
   resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"
   bin:
@@ -11580,11 +11591,15 @@ __metadata:
     "@types/node": ^16.7.13
     "@types/react": ^17.0.20
     "@types/react-dom": ^17.0.9
+    "@typescript-eslint/eslint-plugin": ^5.9.0
+    "@typescript-eslint/parser": ^5.9.0
+    eslint: ^8.6.0
+    eslint-config-prettier: ^8.3.0
     prettier: 2.5.1
     react: ^17.0.2
     react-dom: ^17.0.2
     react-scripts: 5.0.0
-    typescript: ^4.4.2
+    typescript: ^4.5.4
     web-vitals: ^2.1.0
   languageName: unknown
   linkType: soft
