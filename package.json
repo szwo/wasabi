@@ -25,6 +25,7 @@
         "eslint": "^8.6.0",
         "eslint-config-prettier": "^8.3.0",
         "husky": "^7.0.4",
+        "lint-staged": "^12.1.5",
         "prettier": "2.5.1",
         "prettier-plugin-organize-imports": "^2.3.4",
         "react-scripts": "5.0.0",
@@ -39,6 +40,9 @@
         "start": "react-scripts start",
         "test": "react-scripts test",
         "update": "yarn upgrade-interactive"
+    },
+    "lint-staged": {
+        "**/*.{js,jsx,ts,tsx}": "prettier --write && eslint --fix"   
     },
     "eslintConfig": {
         "root": true,
