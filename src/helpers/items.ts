@@ -1,84 +1,75 @@
 const calculateDumplingScore = (quantity: number): number => {
-    const score = (quantity: number) => {
-        switch (quantity) {
-            case 1:
-                return 1;
-            case 2:
-                return 3;
-            case 3:
-                return 6;
-            case 4:
-                return 10;
-            case 5:
-                return 15;
-            default:
-                return 0;
-        }
-    };
-
-    let result = 0;
-    const multiplier = Math.floor(quantity / 5);
-    result += score(5) * multiplier;
-    result += score(quantity % 5);
-
-    return result;
+    switch (quantity) {
+        case 0:
+            return 0;
+        case 1:
+            return 1;
+        case 2:
+            return 3;
+        case 3:
+            return 6;
+        case 4:
+            return 10;
+        default:
+            return 15;
+    }
 };
 
-const items = [
-    {
-        id: 1,
-        name: 'Egg Roll',
+const items: Record<string, Item> = {
+    eggNigiri: {
+        name: 'Egg Nigiri',
         description: '1 point each',
+        max: 5,
         calculation: (quantity: number) => quantity * 1,
     },
-    {
-        id: 2,
-        name: 'Egg Roll + Wasabi',
+    eggNigiriWasabi: {
+        name: 'Egg Nigiri + Wasabi',
         description: '1 * 3 points each',
+        max: 5,
         calculation: (quantity: number) => quantity * 3,
     },
-    {
-        id: 3,
-        name: 'Salmon Roll',
+    salmonNigiri: {
+        name: 'Salmon Nigiri',
         description: '2 points each',
+        max: 10,
         calculation: (quantity: number) => quantity * 2,
     },
-    {
-        id: 4,
-        name: 'Salmon Roll + Wasabi',
+    salmonNigiriWasabi: {
+        name: 'Salmon Nigiri + Wasabi',
         description: '2 * 3 points each',
+        max: 6,
         calculation: (quantity: number) => quantity * 6,
     },
-    {
-        id: 5,
-        name: 'Squid Roll',
+    squidNigiri: {
+        name: 'Squid Nigiri',
         description: '3 points each',
+        max: 5,
         calculation: (quantity: number) => quantity * 3,
     },
-    {
-        id: 6,
-        name: 'Squid Roll + Wasabi',
+    squidNigiriWasabi: {
+        name: 'Squid Nigiri + Wasabi',
         description: '3 * 3 points each',
+        max: 5,
         calculation: (quantity: number) => quantity * 9,
     },
-    {
-        id: 7,
+    dumpling: {
         name: 'Dumpling',
         description: 'Variable scoring based on quantity',
+        max: 5,
         calculation: calculateDumplingScore,
     },
-    {
-        id: 8,
+    tempura: {
         name: 'Tempura',
         description: '5 points per pair',
+        max: 14,
         calculation: (quantity: number) => Math.floor(quantity / 2) * 5,
     },
-    {
-        id: 9,
+    sashimi: {
         name: 'Sashimi',
         description: '10 points per trio',
+        max: 14,
         calculation: (quantity: number) => Math.floor(quantity / 3) * 10,
-    },
-];
+    }
+};
 
 export default items;

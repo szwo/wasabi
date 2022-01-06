@@ -1,26 +1,22 @@
 import { Button, ButtonGroup, Card, CardContent, Typography } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 
 export interface ItemProps {
-    id: number;
+    id: string;
     name: string;
     description: string;
-    calculation: (quantity: number) => number;
-    updateScore: (id: string, score: number) => void;
+    max: number;
+    quantity: Quantity;
+    setQuantity: (id: string, quantity: number) => void;
 }
 
 const Item: FC<ItemProps> = (props: ItemProps) => {
-    const { id, name, description, calculation, updateScore } = props;
+    const { id, name, description, max, quantity, setQuantity } = props;
+    const { rawQuantity, score } = quantity;
 
-    const [quantity, setQuantity] = useState(0);
-
-    useEffect(() => {
-        updateScore(id.toString(), calculation(quantity));
-    }, [quantity]);
-
-    const updateQuantity = (delta: number): void => {
-        setQuantity(quantity + delta);
-    };
+    const updateQuantity = (delta: number) => {
+        setQuantity(id, rawQuantity + delta);
+    }
 
     return (
         <Card variant="outlined">
@@ -31,24 +27,23 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
                 <div>Item Description: {description}</div>
                 <div>
                     <div>
-                        <span>Your Quantity: </span>
-                        <input
-                            name="quantity"
-                            type="number"
-                            value={quantity}
-                            min="0"
-                            onChange={e => setQuantity(Number(e.target.value))}
-                        />
-                        <ButtonGroup variant="contained" size="small">
-                            <Button color="error" disabled={quantity <= 0} onClick={() => updateQuantity(-1)}>
-                                -
-                            </Button>
-                            <Button color="success" onClick={() => updateQuantity(1)}>
-                                +
-                            </Button>
-                        </ButtonGroup>
+                        <span>Your Quantity: {rawQuantity}</span>
                     </div>
-                    <div>Total Points: {calculation(quantity)}</div>
+                    <ButtonGroup variant="contained" size="small">
+                        <Button 
+                            color="error"
+                            disabled={rawQuantity <= 0} 
+                            onClick={() => updateQuantity(-1)}>
+                            -
+                        </Button>
+                        <Button 
+                            color="success"
+                            disabled={rawQuantity >= max} 
+                            onClick={() => updateQuantity(1)}>
+                            +
+                        </Button>
+                    </ButtonGroup>
+                    <div>Total Points: {score}</div>
                 </div>
             </CardContent>
         </Card>
