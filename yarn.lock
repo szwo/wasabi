@@ -9501,6 +9501,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier@npm:2.5.1":
+  version: 2.5.1
+  resolution: "prettier@npm:2.5.1"
+  bin:
+    prettier: bin-prettier.js
+  checksum: 21b9408476ea1c544b0e45d51ceb94a84789ff92095abb710942d780c862d0daebdb29972d47f6b4d0f7ebbfb0ffbf56cc2cfa3e3e9d1cca54864af185b15b66
+  languageName: node
+  linkType: hard
+
 "pretty-bytes@npm:^5.3.0, pretty-bytes@npm:^5.4.1":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
@@ -11571,6 +11580,7 @@ __metadata:
     "@types/node": ^16.7.13
     "@types/react": ^17.0.20
     "@types/react-dom": ^17.0.9
+    prettier: 2.5.1
     react: ^17.0.2
     react-dom: ^17.0.2
     react-scripts: 5.0.0
