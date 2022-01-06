@@ -42,7 +42,10 @@
         "update": "yarn upgrade-interactive"
     },
     "lint-staged": {
-        "**/*.{js,jsx,ts,tsx}": "prettier --write && eslint --fix"   
+        "**/*.{js,jsx,ts,tsx}": [
+            "prettier --write",
+            "eslint --fix"
+        ]   
     },
     "eslintConfig": {
         "root": true,

@@ -1,6 +1,6 @@
 import ScoreCard from 'components/scorecard';
 import React from 'react';
-import './App.css';
+import './App.scss';
 import logo from './logo.svg';
 
 function App() {
