@@ -24,6 +24,7 @@
         "@typescript-eslint/parser": "^5.9.0",
         "eslint": "^8.6.0",
         "eslint-config-prettier": "^8.3.0",
+        "husky": "^7.0.4",
         "prettier": "2.5.1",
         "prettier-plugin-organize-imports": "^2.3.4",
         "react-scripts": "5.0.0",
@@ -34,6 +35,7 @@
         "eject": "react-scripts eject",
         "format": "prettier --write 'src/**/*.{ts,tsx,css,html,json}'",
         "lint": "yarn format && eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
+        "postinstall": "husky install",
         "start": "react-scripts start",
         "test": "react-scripts test",
         "update": "yarn upgrade-interactive"
