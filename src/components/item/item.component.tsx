@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
 import { Button, ButtonGroup, Card, CardContent, Typography } from '@mui/material';
+import React, { FC, useState } from 'react';
 
 export interface ItemProps {
     name: string;
@@ -14,7 +14,9 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
     return (
         <Card variant="outlined">
             <CardContent>
-                <Typography gutterBottom variant="h5">{name}</Typography>
+                <Typography gutterBottom variant="h5">
+                    {name}
+                </Typography>
                 <div>Item Description: {description}</div>
                 <div>
                     <div>
@@ -27,15 +29,10 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
                             onChange={e => setQuantity(Number(e.target.value))}
                         />
                         <ButtonGroup variant="contained" size="small">
-                            <Button 
-                                color="error"
-                                disabled={quantity <= 0}
-                                onClick={() => setQuantity(quantity - 1)}>
+                            <Button color="error" disabled={quantity <= 0} onClick={() => setQuantity(quantity - 1)}>
                                 -
                             </Button>
-                            <Button
-                                color="success" 
-                                onClick={() => setQuantity(quantity + 1)}>
+                            <Button color="success" onClick={() => setQuantity(quantity + 1)}>
                                 +
                             </Button>
                         </ButtonGroup>
