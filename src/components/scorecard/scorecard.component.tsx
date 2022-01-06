@@ -34,7 +34,7 @@ const ScoreCard: FC = () => {
         }, 0);
 
         setTotalScore(total);
-    }, [quantities])
+    }, [quantities]);
 
     const setQuantity = (id: string, quantity: number): void => {
         setQuantities(currentQuantities => {
@@ -43,9 +43,9 @@ const ScoreCard: FC = () => {
                 [id]: {
                     ...currentQuantities[id],
                     rawQuantity: quantity,
-                    score: items[id].calculation(quantity)
-                }
-            }
+                    score: items[id].calculation(quantity),
+                },
+            };
         });
     };
 
@@ -56,12 +56,10 @@ const ScoreCard: FC = () => {
             id: key,
             ...value,
             quantity: quantities[key],
-            setQuantity
+            setQuantity,
         };
 
-        const node = (
-            <Item key={key} {...props} />
-        );
+        const node = <Item key={key} {...props} />;
 
         itemNodes.push(node);
     }

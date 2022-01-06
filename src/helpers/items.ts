@@ -69,7 +69,7 @@ const items: Record<string, Item> = {
         description: '10 points per trio',
         max: 14,
         calculation: (quantity: number) => Math.floor(quantity / 3) * 10,
-    }
+    },
 };
 
 export default items;

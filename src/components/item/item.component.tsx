@@ -16,7 +16,7 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
 
     const updateQuantity = (delta: number) => {
         setQuantity(id, rawQuantity + delta);
-    }
+    };
 
     return (
         <Card variant="outlined">
@@ -30,16 +30,10 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
                         <span>Your Quantity: {rawQuantity}</span>
                     </div>
                     <ButtonGroup variant="contained" size="small">
-                        <Button 
-                            color="error"
-                            disabled={rawQuantity <= 0} 
-                            onClick={() => updateQuantity(-1)}>
+                        <Button color="error" disabled={rawQuantity <= 0} onClick={() => updateQuantity(-1)}>
                             -
                         </Button>
-                        <Button 
-                            color="success"
-                            disabled={rawQuantity >= max} 
-                            onClick={() => updateQuantity(1)}>
+                        <Button color="success" disabled={rawQuantity >= max} onClick={() => updateQuantity(1)}>
                             +
                         </Button>
                     </ButtonGroup>
