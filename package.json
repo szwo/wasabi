@@ -23,6 +23,7 @@
         "@typescript-eslint/parser": "^5.10.0",
         "eslint": "^8.7.0",
         "eslint-config-prettier": "^8.3.0",
+        "eslint-config-react": "^1.1.7",
         "husky": "^7.0.4",
         "lint-staged": "^12.1.7",
         "prettier": "2.5.1",
@@ -52,8 +53,6 @@
             "@typescript-eslint"
         ],
         "extends": [
-            "react-app",
-            "react-app/jest",
             "eslint:recommended",
             "plugin:@typescript-eslint/recommended",
             "prettier"
