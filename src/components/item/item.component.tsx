@@ -1,22 +1,30 @@
-import { Button, ButtonGroup, Card, CardContent, Typography } from '@mui/material';
-import React, { FC } from 'react';
-
+import { Card, CardContent, Typography } from '@mui/material';
+import React, { FC, useEffect, useState } from 'react';
+import QuantityPicker from '../QuantityPicker';
 export interface ItemProps {
-    id: string;
-    name: string;
+    calculation: (quantity: number) => number;
     description: string;
     max: number;
-    quantity: Quantity;
-    setQuantity: (id: string, quantity: number) => void;
+    name: string;
+    score: number;
+    setScore: (quantity: number) => void;
+    wasabiEligible: boolean;
 }
 
 const Item: FC<ItemProps> = (props: ItemProps) => {
-    const { id, name, description, max, quantity, setQuantity } = props;
-    const { rawQuantity, score } = quantity;
+    const { name, description, max, calculation, score, setScore, wasabiEligible } = props;
+    const [quantity, setQuantity] = useState(0);
+    const [wasabiQuantity, setWasabiQuantity] = useState(0);
 
-    const updateQuantity = (delta: number) => {
-        setQuantity(id, rawQuantity + delta);
-    };
+    useEffect(() => {
+        let score = calculation(quantity);
+
+        if (wasabiEligible) {
+            score += calculation(wasabiQuantity) * 3;
+        }
+
+        setScore(score);
+    }, [quantity, wasabiQuantity]);
 
     return (
         <Card variant="outlined">
@@ -25,20 +33,14 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
                     {name}
                 </Typography>
                 <div>Item Description: {description}</div>
-                <div>
-                    <div>
-                        <span>Your Quantity: {rawQuantity}</span>
-                    </div>
-                    <ButtonGroup variant="contained" size="small">
-                        <Button color="error" disabled={rawQuantity <= 0} onClick={() => updateQuantity(-1)}>
-                            -
-                        </Button>
-                        <Button color="success" disabled={rawQuantity >= max} onClick={() => updateQuantity(1)}>
-                            +
-                        </Button>
-                    </ButtonGroup>
-                    <div>Total Points: {score}</div>
-                </div>
+                <QuantityPicker max={max} setQuantity={setQuantity} />
+                {wasabiEligible && (
+                    <>
+                        <p>Wasabi:</p>
+                        <QuantityPicker max={max} setQuantity={setWasabiQuantity} />
+                    </>
+                )}
+                <div>Total Points: {score}</div>
             </CardContent>
         </Card>
     );

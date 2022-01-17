@@ -1,4 +1,4 @@
-import ScoreCard from 'components/scorecard';
+import ScoreCard from 'components/ScoreCard';
 import React from 'react';
 import './App.scss';
 import logo from './logo.svg';

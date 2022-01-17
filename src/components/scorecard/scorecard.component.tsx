@@ -1,73 +1,32 @@
-import Item from 'components/item';
-import { ItemProps } from 'components/item/item.component';
+import Item from 'components/Item';
 import items from 'helpers/items';
 import React, { FC, useEffect, useState } from 'react';
 import './scorecard.styles.scss';
 
-/**
- * Helper function for initializing the quantity map
- * @returns {Record<string, Quantity} Empty Quantity Map with 0 values
- */
-const getEmptyQuantityMap = (): Record<string, Quantity> => {
-    const map: Record<string, Quantity> = {};
-
-    Object.keys(items).forEach(item => {
-        map[item] = {
-            rawQuantity: 0,
-            quantityWithWasabi: 0,
-            score: 0,
-        };
-    });
-
-    return map;
-};
-
 const ScoreCard: FC = () => {
-    const [quantities, setQuantities] = useState<Record<string, Quantity>>(getEmptyQuantityMap());
+    const [eggNigiriScore, setEggNigiriScore] = useState(0);
+    const [salmonNigiriScore, setSalmonNigiriScore] = useState(0);
+    const [squidNigiriScore, setSquidNigiriScore] = useState(0);
+    const [dumplingScore, setDumplingScore] = useState(0);
+    const [tempuraScore, setTempuraScore] = useState(0);
+    const [sashimiScore, setSashimiScore] = useState(0);
     const [totalScore, setTotalScore] = useState(0);
 
     useEffect(() => {
-        // TODO: This is expensive, find a better way to not recalculate score with each change
-        const total = Object.keys(quantities).reduce((acc, item) => {
-            const { score } = quantities[item];
-            return acc + score;
-        }, 0);
-
+        const total =
+            eggNigiriScore + salmonNigiriScore + squidNigiriScore + dumplingScore + tempuraScore + sashimiScore;
         setTotalScore(total);
-    }, [quantities]);
-
-    const setQuantity = (id: string, quantity: number): void => {
-        setQuantities(currentQuantities => {
-            return {
-                ...currentQuantities,
-                [id]: {
-                    ...currentQuantities[id],
-                    rawQuantity: quantity,
-                    score: items[id].calculation(quantity),
-                },
-            };
-        });
-    };
-
-    const itemNodes = [];
-
-    for (const [key, value] of Object.entries(items)) {
-        const props: ItemProps = {
-            id: key,
-            ...value,
-            quantity: quantities[key],
-            setQuantity,
-        };
-
-        const node = <Item key={key} {...props} />;
-
-        itemNodes.push(node);
-    }
+    }, [eggNigiriScore, salmonNigiriScore, squidNigiriScore, dumplingScore, tempuraScore, sashimiScore]);
 
     return (
         <>
             <div className="pinned">Total Score: {totalScore}</div>
-            {itemNodes}
+            <Item {...items.eggNigiri} score={eggNigiriScore} setScore={setEggNigiriScore} />
+            <Item {...items.salmonNigiri} score={salmonNigiriScore} setScore={setSalmonNigiriScore} />
+            <Item {...items.squidNigiri} score={squidNigiriScore} setScore={setSquidNigiriScore} />
+            <Item {...items.dumpling} score={dumplingScore} setScore={setDumplingScore} />
+            <Item {...items.tempura} score={tempuraScore} setScore={setTempuraScore} />
+            <Item {...items.sashimi} score={sashimiScore} setScore={setSashimiScore} />
         </>
     );
 };

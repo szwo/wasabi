@@ -1,8 +1,9 @@
 type Item = {
-    name: string;
+    calculation: (quantity: number) => number;
     description: string;
     max: number;
-    calculation: (quantity: number) => number;
+    name: string;
+    wasabiEligible: boolean;
 };
 
 type Quantity = {
