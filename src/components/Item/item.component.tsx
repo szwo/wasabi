@@ -1,6 +1,8 @@
-import { Card, CardContent, Typography } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 import QuantityPicker from '../QuantityPicker';
+import './item.styles.scss';
+
 export interface ItemProps {
     calculation: (quantity: number) => number;
     description: string;
@@ -27,22 +29,38 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
     }, [quantity, wasabiQuantity]);
 
     return (
-        <Card variant="outlined">
-            <CardContent>
-                <Typography gutterBottom variant="h5">
-                    {name}
-                </Typography>
-                <div>Item Description: {description}</div>
-                <QuantityPicker max={max} quantity={quantity} setQuantity={setQuantity} />
-                {wasabiEligible && (
-                    <>
-                        <p>Wasabi:</p>
-                        <QuantityPicker max={max} quantity={wasabiQuantity} setQuantity={setWasabiQuantity} />
-                    </>
-                )}
-                <div>Total Points: {score}</div>
-            </CardContent>
-        </Card>
+        <div className="card-container">
+            <Paper elevation={3}>
+                <div className="paper-contents">
+                    <Grid container>
+                        <Grid item xs={4}>
+                            <Typography gutterBottom variant="h5">
+                                {name}
+                            </Typography>
+                            <div className="item-total">Total Points: {score}</div>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Grid container>
+                                <Grid item xs={wasabiEligible ? 6 : 12}>
+                                    <div className="description">{description}</div>
+                                    <QuantityPicker max={max} quantity={quantity} setQuantity={setQuantity} />
+                                </Grid>
+                                {wasabiEligible && (
+                                    <Grid item xs={6}>
+                                        <div className="description">x3 with Wasabi</div>
+                                        <QuantityPicker
+                                            max={max}
+                                            quantity={wasabiQuantity}
+                                            setQuantity={setWasabiQuantity}
+                                        />
+                                    </Grid>
+                                )}
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Paper>
+        </div>
     );
 };
 

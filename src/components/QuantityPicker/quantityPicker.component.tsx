@@ -1,5 +1,6 @@
 import { Button, ButtonGroup } from '@mui/material';
 import React, { Dispatch, FC, SetStateAction } from 'react';
+import './quantityPicker.styles.scss';
 
 interface QuantityPickerProps {
     max: number;
@@ -16,14 +17,27 @@ const QuantityPicker: FC<QuantityPickerProps> = (props: QuantityPickerProps) => 
 
     return (
         <div>
-            <div>
-                <span>Your Quantity: {quantity}</span>
-            </div>
             <ButtonGroup variant="contained" size="small">
-                <Button color="error" disabled={quantity <= 0} onClick={() => updateQuantity(-1)}>
+                <Button
+                    className="quantity-button"
+                    color="error"
+                    disabled={quantity <= 0}
+                    onClick={() => updateQuantity(-1)}
+                >
                     -
                 </Button>
-                <Button color="success" disabled={quantity >= max} onClick={() => updateQuantity(1)}>
+                <input
+                    className="number-input"
+                    type="number"
+                    value={quantity.toString()}
+                    onChange={e => setQuantity(parseInt(e.target.value) || 0)}
+                />
+                <Button
+                    className="quantity-button"
+                    color="success"
+                    disabled={quantity >= max}
+                    onClick={() => updateQuantity(1)}
+                >
                     +
                 </Button>
             </ButtonGroup>
