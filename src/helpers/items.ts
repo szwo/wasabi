@@ -58,6 +58,13 @@ const items: Record<string, Item> = {
         name: 'Sashimi',
         wasabiEligible: false,
     },
+    maki: {
+        calculation: (quantity: number) => quantity,
+        description: 'Most gets 6 / 3',
+        max: 14, // TODO: Determine actual max
+        name: 'Maki',
+        wasabiEligible: false,
+    },
 };
 
 export default items;

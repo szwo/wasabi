@@ -37,7 +37,7 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
                             <Typography gutterBottom variant="h5">
                                 {name}
                             </Typography>
-                            <div className="item-total">Total Points: {score}</div>
+                            <div className="item-total">Total: {score}</div>
                         </Grid>
                         <Grid item xs={8}>
                             <Grid container>

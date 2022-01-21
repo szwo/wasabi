@@ -1,3 +1,3 @@
-import ScoreCard from './scorecard.component';
+import ScoreCard from './scoreCard.component';
 
 export default ScoreCard;
