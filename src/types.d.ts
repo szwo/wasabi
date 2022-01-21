@@ -1,3 +1,9 @@
+type PlayerScore = {
+    score: number;
+    maki: number;
+    pudding: number;
+};
+
 type Item = {
     calculation: (quantity: number) => number;
     description: string;
