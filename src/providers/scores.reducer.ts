@@ -1,35 +1,8 @@
-// Actions
-
-export type AddMakiScores = {
-    type: 'ADD_MAKI_SCORES';
-    payload: {
-        playerId: string;
-        round: number;
-        pointsToAdd: number;
-    };
-};
-
-export type CreatePlayerAction = {
-    type: 'CREATE_PLAYER';
-    payload: {
-        playerId: string;
-    };
-};
-
-export type SetScoreAction = {
-    type: 'SET_SCORE';
-    payload: {
-        playerId: string;
-        round: number;
-        rawScore: number;
-        makiQty: number;
-        puddingQty: number;
-    };
-};
+import { AddMakiScores, CreatePlayerAction, SetScoreAction } from './scores.actions';
 
 export type Actions = AddMakiScores | CreatePlayerAction | SetScoreAction;
 
-const addMakiScores = (state: Record<string, Player>, action: AddMakiScores): Record<string, Player> => {
+const addMakiScores = (state: ScoresState, action: AddMakiScores): ScoresState => {
     const { playerId, round, pointsToAdd } = action.payload;
     const currentRoundKey = 'round' + round;
 
@@ -47,7 +20,7 @@ const addMakiScores = (state: Record<string, Player>, action: AddMakiScores): Re
     };
 };
 
-const createPlayer = (state: Record<string, Player>, action: CreatePlayerAction): Record<string, Player> => {
+const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresState => {
     const { playerId } = action.payload;
     return {
         ...state,
@@ -60,7 +33,7 @@ const createPlayer = (state: Record<string, Player>, action: CreatePlayerAction)
     };
 };
 
-const setPlayerScore = (state: Record<string, Player>, action: SetScoreAction): Record<string, Player> => {
+const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState => {
     const { playerId, round, rawScore, makiQty, puddingQty } = action.payload;
     const currentRoundKey = 'round' + round;
 
@@ -77,7 +50,7 @@ const setPlayerScore = (state: Record<string, Player>, action: SetScoreAction): 
     };
 };
 
-const reducer = (state: Record<string, Player>, action: Actions): Record<string, Player> => {
+const reducer = (state: ScoresState, action: Actions): ScoresState => {
     switch (action.type) {
         case 'ADD_MAKI_SCORES':
             return addMakiScores(state, action);

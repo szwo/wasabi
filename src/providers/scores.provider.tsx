@@ -1,7 +1,7 @@
 import React, { createContext, ReactElement, useEffect, useReducer } from 'react';
 import ScoresReducer, { Actions } from './scores.reducer';
 
-export type ScoresContextType = [Record<string, Player>, (type: Actions) => void]; // TODO: Type me
+export type ScoresContextType = [ScoresState, (type: Actions) => void]; // TODO: Type me
 export const ScoresContext = createContext<ScoresContextType | undefined>(undefined);
 const initialState = {};
 

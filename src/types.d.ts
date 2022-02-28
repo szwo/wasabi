@@ -25,3 +25,5 @@ type Player = {
     round3: RoundScore;
     puddingQty: number;
 };
+
+type ScoresState = Record<string, Player>;
