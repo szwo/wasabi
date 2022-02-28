@@ -1,8 +1,8 @@
-import { AddMakiScores, CreatePlayerAction, SetScoreAction } from './scores.actions';
+import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction } from './scores.actions';
 
-export type Actions = AddMakiScores | CreatePlayerAction | SetScoreAction;
+export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction;
 
-const addMakiScores = (state: ScoresState, action: AddMakiScores): ScoresState => {
+const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresState => {
     const { playerId, round, pointsToAdd } = action.payload;
     const currentRoundKey = 'round' + round;
 
@@ -52,8 +52,8 @@ const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState
 
 const reducer = (state: ScoresState, action: Actions): ScoresState => {
     switch (action.type) {
-        case 'ADD_MAKI_SCORES':
-            return addMakiScores(state, action);
+        case 'ADD_MAKI_SCORE':
+            return addMakiScore(state, action);
         case 'CREATE_PLAYER':
             return createPlayer(state, action);
         case 'SET_SCORE':

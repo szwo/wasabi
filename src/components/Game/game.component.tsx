@@ -1,7 +1,7 @@
 import { Button, Grid } from '@mui/material';
 import ScoreCard from 'components/ScoreCard';
 import { useScoresContext } from 'hooks';
-import { AddMakiScores, CreatePlayerAction, SetScoreAction } from 'providers/scores.reducer';
+import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction } from 'providers/scores.actions';
 import React, { FC, useEffect, useState } from 'react';
 import './game.styles.scss';
 
@@ -21,8 +21,8 @@ const Game: FC = () => {
         const points = Math.floor(totalPoints / winners.length);
 
         for (const winnerId of winners) {
-            const action: AddMakiScores = {
-                type: 'ADD_MAKI_SCORES',
+            const action: AddMakiScoreAction = {
+                type: 'ADD_MAKI_SCORE',
                 payload: {
                     playerId: winnerId,
                     round,

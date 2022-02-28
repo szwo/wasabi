@@ -1,5 +1,5 @@
-export type AddMakiScores = {
-    type: 'ADD_MAKI_SCORES';
+export type AddMakiScoreAction = {
+    type: 'ADD_MAKI_SCORE';
     payload: {
         playerId: string;
         round: number;
