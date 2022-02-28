@@ -1,3 +1,4 @@
-import useScore from './useScore';
+import useRoundScore from './useRoundScore';
+import useScoresContext from './useScoresContext';
 
-export { useScore };
+export { useRoundScore, useScoresContext };

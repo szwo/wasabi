@@ -1,13 +1,14 @@
+import ScoresProvider from 'providers/scores.provider';
 import React from 'react';
 import './App.scss';
 import Game from './components/Game';
 
-function App() {
+const App = () => {
     return (
-        <div>
+        <ScoresProvider>
             <Game />
-        </div>
+        </ScoresProvider>
     );
-}
+};
 
 export default App;

@@ -1,26 +1,16 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { AppBar, Button, IconButton, Toolbar, Typography } from '@mui/material';
-import { ScoreType } from 'helpers/enums';
 import React, { FC } from 'react';
 import ElevationScroll from './elevationScroll.component';
-
 interface ScoreCardHeaderProps {
     id: string;
-    totalScore: number;
-    makiScore: number;
-    updateScore: (type: ScoreType, id: string, newScore: number) => void;
+    sendScore: () => void;
     submitted: boolean;
-    setSubmitted: (submitted: boolean) => void;
+    totalScore: number;
 }
 
 const ScoreCardHeader: FC<ScoreCardHeaderProps> = (props: ScoreCardHeaderProps) => {
-    const { id, totalScore, makiScore, submitted, updateScore, setSubmitted } = props;
-
-    const sendScore = () => {
-        updateScore(ScoreType.SCORE, id, totalScore);
-        updateScore(ScoreType.MAKI, id, makiScore);
-        setSubmitted(true);
-    };
+    const { id, totalScore, submitted, sendScore } = props;
 
     return (
         <div className="scorecard-header">
@@ -35,7 +25,7 @@ const ScoreCardHeader: FC<ScoreCardHeaderProps> = (props: ScoreCardHeaderProps) 
                                 <CheckCircleIcon sx={{ color: '#ffffff' }} />
                             </IconButton>
                         )}
-                        <Button color="inherit" variant="outlined" onClick={() => sendScore()}>
+                        <Button color="inherit" variant="outlined" onClick={sendScore}>
                             Submit Scores
                         </Button>
                     </Toolbar>

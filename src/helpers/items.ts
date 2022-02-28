@@ -65,6 +65,13 @@ const items: Record<string, Item> = {
         name: 'Maki',
         wasabiEligible: false,
     },
+    pudding: {
+        calculation: (quantity: number) => quantity,
+        description: 'End of game calc',
+        max: 14, // TODO: Determine actual max
+        name: 'Pudding',
+        wasabiEligible: false,
+    },
 };
 
 export default items;

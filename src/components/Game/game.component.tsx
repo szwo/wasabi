@@ -1,41 +1,16 @@
 import { Button, Grid } from '@mui/material';
 import ScoreCard from 'components/ScoreCard';
-import { ScoreType } from 'helpers/enums';
+import { useScoresContext } from 'hooks';
+import { AddMakiScores, CreatePlayerAction, SetScoreAction } from 'providers/scores.reducer';
 import React, { FC, useEffect, useState } from 'react';
 import './game.styles.scss';
 
 const players = ['Sim', 'Audge', 'Oreo']; // TODO: Should be dynamic
+const colSize = 12 / players.length;
 
 const Game: FC = () => {
-    const [scores, setScores] = useState<Record<string, PlayerScore>>({});
-
-    useEffect(() => {
-        console.log(scores);
-    }, [scores]);
-
-    const colSize = 12 / players.length;
-
-    /**
-     * Helper function for converting scores array to frequency map for Maki counts
-     * @returns {Record<string, Array<string>>} Frequency map showing maki counts and corresponding player ids
-     */
-    const collectMakiCounts = (): Record<string, Array<string>> => {
-        const result: Record<string, Array<string>> = {};
-
-        for (const [player, score] of Object.entries(scores)) {
-            if (score.maki > 0) {
-                const makiCount = score.maki.toString();
-
-                if (result[makiCount]) {
-                    result[makiCount].push(player);
-                } else {
-                    result[makiCount] = [player];
-                }
-            }
-        }
-
-        return result;
-    };
+    const [state, dispatch] = useScoresContext();
+    const [round, setRound] = useState(1); // TODO: Advance me
 
     /**
      * Helper function for distributing points from Maki winners
@@ -45,17 +20,42 @@ const Game: FC = () => {
     const addMakiPoints = (totalPoints: number, winners: string[]): void => {
         const points = Math.floor(totalPoints / winners.length);
 
-        for (const winner of winners) {
-            setScores(prev => {
-                return {
-                    ...prev,
-                    [winner]: {
-                        ...prev[winner],
-                        score: prev[winner].score + points,
-                    },
-                };
-            });
+        for (const winnerId of winners) {
+            const action: AddMakiScores = {
+                type: 'ADD_MAKI_SCORES',
+                payload: {
+                    playerId: winnerId,
+                    round,
+                    pointsToAdd: points,
+                },
+            };
+
+            dispatch(action);
         }
+    };
+
+    /**
+     * Helper function for generating Maki frequency map to player IDs
+     * @returns {Record<string, Array<string>>} Frequency map showing maki counts and corresponding player ids
+     */
+    const collectMakiCounts = (): Record<string, Array<string>> => {
+        const result: Record<string, Array<string>> = {};
+
+        for (const [playerId, scores] of Object.entries(state)) {
+            const currentRoundKey = 'round' + round;
+            // @ts-expect-error: Dynamic key being used to query for round // TODO: Find a better way to do this
+            const currentRound = scores[currentRoundKey];
+            const roundMakiCount = currentRound.makiQty;
+            if (roundMakiCount > 0) {
+                if (result[roundMakiCount]) {
+                    result[roundMakiCount].push(playerId);
+                } else {
+                    result[roundMakiCount] = [playerId];
+                }
+            }
+        }
+
+        return result;
     };
 
     /**
@@ -71,7 +71,9 @@ const Game: FC = () => {
 
         const firstPlace = orderedKeys[0];
         const firstPlaceWinners = distribution[firstPlace] || [];
-        if (firstPlaceWinners.length) addMakiPoints(6, firstPlaceWinners);
+        if (firstPlaceWinners.length) {
+            addMakiPoints(6, firstPlaceWinners);
+        }
 
         if (orderedKeys.length > 1) {
             const secondPlace = orderedKeys[1];
@@ -80,25 +82,59 @@ const Game: FC = () => {
         }
     };
 
-    const updateScore = (type: ScoreType, id: string, newScore: number) => {
-        setScores(previous => {
-            return {
-                ...previous,
-                [id]: {
-                    ...previous[id],
-                    [type]: newScore,
+    // const updateScore = (type: ScoreType, id: string, newScore: number) => {
+    //     setRound1Scores(previous => {
+    //         return {
+    //             ...previous,
+    //             [id]: {
+    //                 ...previous[id],
+    //                 [type]: newScore,
+    //             },
+    //         };
+    //     });
+    // };
+
+    const finishRound = () => {
+        calculateMakiWinners();
+        if (round < 3) {
+            setRound(round + 1);
+        }
+    };
+
+    const dispatchUpdateScore = (playerId: string, rawScore: number, makiQty: number, puddingQty: number): void => {
+        const action: SetScoreAction = {
+            type: 'SET_SCORE',
+            payload: {
+                playerId,
+                round,
+                rawScore,
+                makiQty,
+                puddingQty,
+            },
+        };
+        dispatch(action);
+    };
+
+    useEffect(() => {
+        for (const player of players) {
+            const action: CreatePlayerAction = {
+                type: 'CREATE_PLAYER',
+                payload: {
+                    playerId: player,
                 },
             };
-        });
-    };
+            dispatch(action);
+        }
+    }, []);
 
     return (
         <div className="game-container">
+            <h1>Round {round}</h1>
+            <Button onClick={finishRound}>Test Maki Calc</Button>
             <Grid container>
                 {players.map(player => (
                     <Grid item key={player} xs={colSize}>
-                        <Button onClick={() => calculateMakiWinners()}>Test Maki Calc</Button>
-                        <ScoreCard id={player} updateScore={updateScore} />
+                        <ScoreCard id={player} sendScore={dispatchUpdateScore} />
                     </Grid>
                 ))}
             </Grid>

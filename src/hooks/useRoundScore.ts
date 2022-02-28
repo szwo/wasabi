@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const useScore = () => {
+const useRoundScore = () => {
     const [eggNigiriScore, setEggNigiriScore] = useState(0);
     const [salmonNigiriScore, setSalmonNigiriScore] = useState(0);
     const [squidNigiriScore, setSquidNigiriScore] = useState(0);
@@ -8,6 +8,7 @@ const useScore = () => {
     const [tempuraScore, setTempuraScore] = useState(0);
     const [sashimiScore, setSashimiScore] = useState(0);
     const [makiScore, setMakiScore] = useState(0);
+    const [puddingScore, setPuddingScore] = useState(0);
 
     const [totalScore, setTotalScore] = useState(0);
     const [submitted, setSubmitted] = useState(false);
@@ -35,9 +36,11 @@ const useScore = () => {
         setMakiScore,
         totalScore,
         setTotalScore,
+        puddingScore,
+        setPuddingScore,
         submitted,
         setSubmitted,
     };
 };
 
-export default useScore;
+export default useRoundScore;
