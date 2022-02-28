@@ -25,7 +25,7 @@ const ScoreCardHeader: FC<ScoreCardHeaderProps> = (props: ScoreCardHeaderProps) 
                                 <CheckCircleIcon sx={{ color: '#ffffff' }} />
                             </IconButton>
                         )}
-                        <Button color="inherit" variant="outlined" onClick={sendScore}>
+                        <Button color="inherit" variant="outlined" onClick={sendScore} disabled={submitted}>
                             Submit Scores
                         </Button>
                     </Toolbar>
