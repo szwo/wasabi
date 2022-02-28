@@ -1,4 +1,5 @@
 import { Button, Grid } from '@mui/material';
+import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import { useScoresContext } from 'hooks';
 import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction } from 'providers/scores.actions';
@@ -11,6 +12,7 @@ const colSize = 12 / players.length;
 const Game: FC = () => {
     const [state, dispatch] = useScoresContext();
     const [round, setRound] = useState(1); // TODO: Advance me
+    const [showScores, setShowScores] = useState(false);
 
     /**
      * Helper function for distributing points from Maki winners
@@ -96,9 +98,10 @@ const Game: FC = () => {
 
     const finishRound = () => {
         calculateMakiWinners();
-        if (round < 3) {
-            setRound(round + 1);
-        }
+        setShowScores(true);
+        // if (round < 3) {
+        //     setRound(round + 1);
+        // }
     };
 
     const dispatchUpdateScore = (playerId: string, rawScore: number, makiQty: number, puddingQty: number): void => {
@@ -116,6 +119,7 @@ const Game: FC = () => {
     };
 
     useEffect(() => {
+        // TODO: Remove me when dynamic player creation is done
         for (const player of players) {
             const action: CreatePlayerAction = {
                 type: 'CREATE_PLAYER',
@@ -131,6 +135,7 @@ const Game: FC = () => {
         <div className="game-container">
             <h1>Round {round}</h1>
             <Button onClick={finishRound}>Test Maki Calc</Button>
+            <ScoreBoard open={showScores} handleClose={() => setShowScores(false)} round={round} scores={state} />
             <Grid container>
                 {players.map(player => (
                     <Grid item key={player} xs={colSize}>
