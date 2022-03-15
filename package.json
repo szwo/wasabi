@@ -2,7 +2,7 @@
     "name": "wasabi",
     "version": "0.1.0",
     "private": true,
-    "packageManager": "yarn@3.1.1",
+    "packageManager": "yarn@3.2.0",
     "dependencies": {
         "@mui/icons-material": "^5.4.2",
         "@mui/material": "^5.4.3",
