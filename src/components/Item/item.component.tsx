@@ -32,7 +32,10 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
         setScore(score);
     }, [quantity, wasabiQuantity]);
 
-    useEffect(() => setQuantity(0), [currentRound]);
+    useEffect(() => {
+        setQuantity(0);
+        setWasabiQuantity(0);
+    }, [currentRound]);
 
     return (
         <div className="card-container">
