@@ -1,21 +1,24 @@
-import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction } from './scores.actions';
+import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction, FinishRoundAction } from './scores.actions';
 
-export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction;
+export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction | FinishRoundAction;
 
 const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresState => {
     const { playerId, round, pointsToAdd } = action.payload;
 
     // Clone the player record to avoid modifying underlying array by ref
-    const playerRecord = JSON.parse(JSON.stringify(state[playerId]));
+    const playerRecord = JSON.parse(JSON.stringify(state.players[playerId]));
     const roundsArrayClone = [...playerRecord.rounds];
     const newRawScore = roundsArrayClone[round].rawScore + pointsToAdd;
     roundsArrayClone[round].rawScore = newRawScore;
 
     return {
         ...state,
-        [playerId]: {
-            ...state[playerId],
-            rounds: roundsArrayClone,
+        players: {
+            ...state.players,
+            [playerId]: {
+                ...state.players[playerId],
+                rounds: roundsArrayClone,
+            },
         },
     };
 };
@@ -24,13 +27,16 @@ const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresSta
     const { playerId } = action.payload;
     return {
         ...state,
-        [playerId]: {
-            rounds: [
-                { rawScore: 0, makiQty: 0 },
-                { rawScore: 0, makiQty: 0 },
-                { rawScore: 0, makiQty: 0 },
-            ],
-            puddingQty: 0,
+        players: {
+            ...state.players,
+            [playerId]: {
+                rounds: [
+                    { rawScore: 0, makiQty: 0 },
+                    { rawScore: 0, makiQty: 0 },
+                    { rawScore: 0, makiQty: 0 },
+                ],
+                puddingQty: 0,
+            },
         },
     };
 };
@@ -41,16 +47,28 @@ const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresSta
  */
 const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState => {
     const { playerId, round, rawScore, makiQty, puddingQty } = action.payload;
-    const roundsArrayClone = [...state[playerId].rounds];
+    const roundsArrayClone = [...state.players[playerId].rounds];
     roundsArrayClone[round] = { rawScore, makiQty };
 
     return {
         ...state,
-        [playerId]: {
-            ...state[playerId],
-            rounds: roundsArrayClone,
-            puddingQty: state[playerId].puddingQty + puddingQty,
+        players: {
+            ...state.players,
+            [playerId]: {
+                ...state.players[playerId],
+                rounds: roundsArrayClone,
+                puddingQty: state.players[playerId].puddingQty + puddingQty,
+            },
         },
+    };
+};
+
+const finishRound = (state: ScoresState, action: FinishRoundAction): ScoresState => {
+    const { currentRound } = action.payload;
+
+    return {
+        ...state,
+        currentRound,
     };
 };
 
@@ -63,6 +81,8 @@ const reducer = (state: ScoresState, action: Actions): ScoresState => {
             return createPlayer(state, action);
         case 'SET_SCORE':
             return setPlayerScore(state, action);
+        case 'FINISH_ROUND':
+            return finishRound(state, action);
         default:
             return state;
     }

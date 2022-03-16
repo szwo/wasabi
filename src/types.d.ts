@@ -24,4 +24,7 @@ type Player = {
     puddingQty: number;
 };
 
-type ScoresState = Record<string, Player>;
+type ScoresState = {
+    players: Record<string, Player>;
+    currentRound: number;
+};

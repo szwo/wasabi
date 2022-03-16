@@ -19,8 +19,8 @@ const ScoreBoard = (props: ScoreBoardProps) => {
     const createPlayerScores = (): ReactNode => {
         return (
             <>
-                {Object.keys(scores).map(player => {
-                    const playerScore = scores[player].rounds[round];
+                {Object.keys(scores.players).map(player => {
+                    const playerScore = scores.players[player].rounds[round];
                     return (
                         <DialogContentText key={player}>
                             {player}: {playerScore?.rawScore}

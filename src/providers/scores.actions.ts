@@ -24,3 +24,10 @@ export type SetScoreAction = {
         puddingQty: number;
     };
 };
+
+export type FinishRoundAction = {
+    type: 'FINISH_ROUND';
+    payload: {
+        currentRound: number;
+    };
+};

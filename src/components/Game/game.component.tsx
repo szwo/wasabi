@@ -3,7 +3,7 @@ import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
 import { useScoresContext } from 'hooks';
-import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction } from 'providers/scores.actions';
+import { AddMakiScoreAction, CreatePlayerAction, FinishRoundAction, SetScoreAction } from 'providers/scores.actions';
 import React, { FC, useEffect, useState } from 'react';
 import './game.styles.scss';
 
@@ -12,7 +12,8 @@ const colSize = 12 / players.length;
 
 const Game: FC = () => {
     const [state, dispatch] = useScoresContext();
-    const [round, setRound] = useState(0); // TODO: Advance me
+    const { currentRound } = state;
+    // const [round, setRound] = useState(0); // TODO: Advance me
     const [showScores, setShowScores] = useState(false);
 
     useEffect(() => {
@@ -41,7 +42,7 @@ const Game: FC = () => {
                 type: 'ADD_MAKI_SCORE',
                 payload: {
                     playerId: winnerId,
-                    round,
+                    round: currentRound,
                     pointsToAdd: points,
                 },
             };
@@ -57,9 +58,9 @@ const Game: FC = () => {
     const collectMakiCounts = (): Record<string, Array<string>> => {
         const result: Record<string, Array<string>> = {};
 
-        for (const [playerId, scores] of Object.entries(state)) {
-            const currentRound = scores.rounds[round];
-            const roundMakiCount = currentRound.makiQty;
+        for (const [playerId, scores] of Object.entries(state.players)) {
+            const currentRoundScores = scores.rounds[currentRound];
+            const roundMakiCount = currentRoundScores.makiQty;
             if (roundMakiCount > 0) {
                 if (result[roundMakiCount]) {
                     result[roundMakiCount].push(playerId);
@@ -97,7 +98,7 @@ const Game: FC = () => {
         }
     };
 
-    const finishRound = () => {
+    const calculateRoundScores = () => {
         calculateMakiWinners();
         setShowScores(true);
     };
@@ -107,7 +108,7 @@ const Game: FC = () => {
             type: 'SET_SCORE',
             payload: {
                 playerId,
-                round,
+                round: currentRound,
                 rawScore,
                 makiQty,
                 puddingQty,
@@ -118,20 +119,24 @@ const Game: FC = () => {
 
     const closeScoreBoard = () => {
         setShowScores(false);
-        setRound(round + 1);
-        // TODO: Reset quantity pickers
+        const action: FinishRoundAction = {
+            type: 'FINISH_ROUND',
+            payload: {
+                currentRound: currentRound + 1,
+            },
+        };
+        dispatch(action);
     };
 
-    // TODO: Only show me when round > 2 (3 rounds have elapsed)
-    if (round > 0) {
+    if (currentRound > 2) {
         return <GameOver />;
     }
 
     return (
         <div className="game-container">
-            <h1 className="round-heading">Round {round + 1}</h1>
-            <Button onClick={finishRound}>Test Maki Calc</Button>
-            <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={round} scores={state} />
+            <h1 className="round-heading">Round {currentRound + 1}</h1>
+            <Button onClick={calculateRoundScores}>Test Maki Calc</Button>
+            <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={currentRound} scores={state} />
             <Grid container>
                 {players.map(player => (
                     <Grid item key={player} xs={colSize}>
