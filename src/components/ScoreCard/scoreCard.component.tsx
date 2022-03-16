@@ -1,8 +1,7 @@
 import Item from 'components/Item';
 import ScoreCardHeader from 'components/ScoreCardHeader';
 import items from 'helpers/items';
-import { useRoundScore } from 'hooks';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import './scoreCard.styles.scss';
 
 interface ScoreCardProps {
@@ -12,27 +11,37 @@ interface ScoreCardProps {
 
 const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
     const { id, sendScore } = props;
-    const {
-        eggNigiriScore,
-        setEggNigiriScore,
-        salmonNigiriScore,
-        setSalmonNigiriScore,
-        squidNigiriScore,
-        setSquidNigiriScore,
-        dumplingScore,
-        setDumplingScore,
-        tempuraScore,
-        setTempuraScore,
-        sashimiScore,
-        setSashimiScore,
-        makiScore,
-        setMakiScore,
-        puddingScore,
-        setPuddingScore,
-        totalScore,
-        submitted,
-        setSubmitted,
-    } = useRoundScore();
+    const [eggNigiriScore, setEggNigiriScore] = useState(0);
+    const [salmonNigiriScore, setSalmonNigiriScore] = useState(0);
+    const [squidNigiriScore, setSquidNigiriScore] = useState(0);
+    const [dumplingScore, setDumplingScore] = useState(0);
+    const [tempuraScore, setTempuraScore] = useState(0);
+    const [sashimiScore, setSashimiScore] = useState(0);
+    const [makiScore, setMakiScore] = useState(0);
+    const [puddingScore, setPuddingScore] = useState(0);
+
+    const [totalScore, setTotalScore] = useState(0);
+    const [submitted, setSubmitted] = useState(false);
+
+    useEffect(() => {
+        const total =
+            eggNigiriScore + salmonNigiriScore + squidNigiriScore + dumplingScore + tempuraScore + sashimiScore;
+        setTotalScore(total);
+    }, [eggNigiriScore, salmonNigiriScore, squidNigiriScore, dumplingScore, tempuraScore, sashimiScore]);
+
+    // TODO: Enable reset
+    const resetScores = () => {
+        setEggNigiriScore(0);
+        setSalmonNigiriScore(0);
+        setSquidNigiriScore(0);
+        setDumplingScore(0);
+        setTempuraScore(0);
+        setSashimiScore(0);
+        setMakiScore(0);
+        setPuddingScore(0);
+        setTotalScore(0);
+        setSubmitted(false);
+    };
 
     const handleSendScore = () => {
         sendScore(id, totalScore, makiScore, puddingScore);
