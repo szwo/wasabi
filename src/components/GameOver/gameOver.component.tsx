@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 const GameOver: FC = () => {
     return (
         <div>
-            <p>Hi, I'm the Final Score component.</p>
+            <p>Hi, I'm the Game Over component.</p>
         </div>
     );
 };
