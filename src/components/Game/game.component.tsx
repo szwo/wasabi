@@ -6,13 +6,26 @@ import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction } from 'provider
 import React, { FC, useEffect, useState } from 'react';
 import './game.styles.scss';
 
-const players = ['Sim', 'Audge', 'Oreo']; // TODO: Should be dynamic
+const players = ['Mochi', 'Oreo']; // TODO: Should be dynamic
 const colSize = 12 / players.length;
 
 const Game: FC = () => {
     const [state, dispatch] = useScoresContext();
     const [round, setRound] = useState(1); // TODO: Advance me
     const [showScores, setShowScores] = useState(false);
+
+    useEffect(() => {
+        // TODO: Remove me when dynamic player creation is done
+        for (const player of players) {
+            const action: CreatePlayerAction = {
+                type: 'CREATE_PLAYER',
+                payload: {
+                    playerId: player,
+                },
+            };
+            dispatch(action);
+        }
+    }, []);
 
     /**
      * Helper function for distributing points from Maki winners
@@ -118,22 +131,9 @@ const Game: FC = () => {
         dispatch(action);
     };
 
-    useEffect(() => {
-        // TODO: Remove me when dynamic player creation is done
-        for (const player of players) {
-            const action: CreatePlayerAction = {
-                type: 'CREATE_PLAYER',
-                payload: {
-                    playerId: player,
-                },
-            };
-            dispatch(action);
-        }
-    }, []);
-
     return (
         <div className="game-container">
-            <h1>Round {round}</h1>
+            <h1 className="round-heading">Round {round}</h1>
             <Button onClick={finishRound}>Test Maki Calc</Button>
             <ScoreBoard open={showScores} handleClose={() => setShowScores(false)} round={round} scores={state} />
             <Grid container>
