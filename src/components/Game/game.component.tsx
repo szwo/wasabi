@@ -1,6 +1,7 @@
 import { Button, Grid } from '@mui/material';
 import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
+import GameOver from 'components/GameOver';
 import { useScoresContext } from 'hooks';
 import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction } from 'providers/scores.actions';
 import React, { FC, useEffect, useState } from 'react';
@@ -99,9 +100,6 @@ const Game: FC = () => {
     const finishRound = () => {
         calculateMakiWinners();
         setShowScores(true);
-        // if (round < 3) {
-        //     setRound(round + 1);
-        // }
     };
 
     const dispatchUpdateScore = (playerId: string, rawScore: number, makiQty: number, puddingQty: number): void => {
@@ -118,11 +116,22 @@ const Game: FC = () => {
         dispatch(action);
     };
 
+    const closeScoreBoard = () => {
+        setShowScores(false);
+        setRound(round + 1);
+        // TODO: Reset quantity pickers
+    };
+
+    // TODO: Only show me when round > 2 (3 rounds have elapsed)
+    if (round > 0) {
+        return <GameOver />;
+    }
+
     return (
         <div className="game-container">
             <h1 className="round-heading">Round {round + 1}</h1>
             <Button onClick={finishRound}>Test Maki Calc</Button>
-            <ScoreBoard open={showScores} handleClose={() => setShowScores(false)} round={round} scores={state} />
+            <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={round} scores={state} />
             <Grid container>
                 {players.map(player => (
                     <Grid item key={player} xs={colSize}>
