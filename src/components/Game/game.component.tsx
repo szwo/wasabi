@@ -11,7 +11,7 @@ const colSize = 12 / players.length;
 
 const Game: FC = () => {
     const [state, dispatch] = useScoresContext();
-    const [round, setRound] = useState(1); // TODO: Advance me
+    const [round, setRound] = useState(0); // TODO: Advance me
     const [showScores, setShowScores] = useState(false);
 
     useEffect(() => {
@@ -57,9 +57,7 @@ const Game: FC = () => {
         const result: Record<string, Array<string>> = {};
 
         for (const [playerId, scores] of Object.entries(state)) {
-            const currentRoundKey = 'round' + round;
-            // @ts-expect-error: Dynamic key being used to query for round // TODO: Find a better way to do this
-            const currentRound = scores[currentRoundKey];
+            const currentRound = scores.rounds[round];
             const roundMakiCount = currentRound.makiQty;
             if (roundMakiCount > 0) {
                 if (result[roundMakiCount]) {
@@ -87,6 +85,7 @@ const Game: FC = () => {
         const firstPlace = orderedKeys[0];
         const firstPlaceWinners = distribution[firstPlace] || [];
         if (firstPlaceWinners.length) {
+            console.log(firstPlaceWinners);
             addMakiPoints(6, firstPlaceWinners);
         }
 
@@ -96,18 +95,6 @@ const Game: FC = () => {
             addMakiPoints(3, secondPlaceWinners);
         }
     };
-
-    // const updateScore = (type: ScoreType, id: string, newScore: number) => {
-    //     setRound1Scores(previous => {
-    //         return {
-    //             ...previous,
-    //             [id]: {
-    //                 ...previous[id],
-    //                 [type]: newScore,
-    //             },
-    //         };
-    //     });
-    // };
 
     const finishRound = () => {
         calculateMakiWinners();
@@ -133,7 +120,7 @@ const Game: FC = () => {
 
     return (
         <div className="game-container">
-            <h1 className="round-heading">Round {round}</h1>
+            <h1 className="round-heading">Round {round + 1}</h1>
             <Button onClick={finishRound}>Test Maki Calc</Button>
             <ScoreBoard open={showScores} handleClose={() => setShowScores(false)} round={round} scores={state} />
             <Grid container>

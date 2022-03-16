@@ -20,9 +20,7 @@ type RoundScore = {
 };
 
 type Player = {
-    round1: RoundScore;
-    round2: RoundScore;
-    round3: RoundScore;
+    rounds: Array<RoundScore>;
     puddingQty: number;
 };
 

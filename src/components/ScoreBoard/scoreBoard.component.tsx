@@ -20,9 +20,7 @@ const ScoreBoard = (props: ScoreBoardProps) => {
         return (
             <>
                 {Object.keys(scores).map(player => {
-                    const roundKey = 'round' + round;
-                    // @ts-expect-error Using string to index round
-                    const playerScore = scores[player][roundKey];
+                    const playerScore = scores[player].rounds[round];
                     return (
                         <DialogContentText key={player}>
                             {player}: {playerScore?.rawScore}
@@ -41,7 +39,7 @@ const ScoreBoard = (props: ScoreBoardProps) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">Round {round} Complete!</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Round {round + 1} Complete!</DialogTitle>
                 <DialogContent>{createPlayerScores()}</DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>OK</Button>
