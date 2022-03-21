@@ -8,8 +8,7 @@ const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresSta
     // Clone the player record to avoid modifying underlying array by ref
     const playerRecord = JSON.parse(JSON.stringify(state.players[playerId]));
     const roundsArrayClone = [...playerRecord.rounds];
-    const newRawScore = roundsArrayClone[round].rawScore + pointsToAdd;
-    roundsArrayClone[round].rawScore = newRawScore;
+    roundsArrayClone[round].makiScore = pointsToAdd;
 
     return {
         ...state,
@@ -31,9 +30,9 @@ const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresSta
             ...state.players,
             [playerId]: {
                 rounds: [
-                    { rawScore: 0, makiQty: 0 },
-                    { rawScore: 0, makiQty: 0 },
-                    { rawScore: 0, makiQty: 0 },
+                    { rawScore: 0, makiQty: 0, makiScore: 0 },
+                    { rawScore: 0, makiQty: 0, makiScore: 0 },
+                    { rawScore: 0, makiQty: 0, makiScore: 0 },
                 ],
                 puddingQty: 0,
             },
@@ -48,7 +47,11 @@ const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresSta
 const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState => {
     const { playerId, round, rawScore, makiQty, puddingQty } = action.payload;
     const roundsArrayClone = [...state.players[playerId].rounds];
-    roundsArrayClone[round] = { rawScore, makiQty };
+    roundsArrayClone[round] = {
+        ...roundsArrayClone[round],
+        rawScore,
+        makiQty,
+    };
 
     return {
         ...state,
