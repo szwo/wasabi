@@ -1,6 +1,17 @@
-import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction, FinishRoundAction } from './scores.actions';
+import {
+    AddMakiScoreAction,
+    CreatePlayerAction,
+    SetScoreAction,
+    TotalRoundScoreAction,
+    AdvanceRoundAction,
+} from './scores.actions';
 
-export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction | FinishRoundAction;
+export type Actions =
+    | AddMakiScoreAction
+    | CreatePlayerAction
+    | SetScoreAction
+    | TotalRoundScoreAction
+    | AdvanceRoundAction;
 
 const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresState => {
     const { playerId, round, pointsToAdd } = action.payload;
@@ -30,9 +41,9 @@ const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresSta
             ...state.players,
             [playerId]: {
                 rounds: [
-                    { rawScore: 0, makiQty: 0, makiScore: 0 },
-                    { rawScore: 0, makiQty: 0, makiScore: 0 },
-                    { rawScore: 0, makiQty: 0, makiScore: 0 },
+                    { rawScore: 0, makiQty: 0, makiScore: 0, totalScore: 0 },
+                    { rawScore: 0, makiQty: 0, makiScore: 0, totalScore: 0 },
+                    { rawScore: 0, makiQty: 0, makiScore: 0, totalScore: 0 },
                 ],
                 puddingQty: 0,
             },
@@ -66,12 +77,29 @@ const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState
     };
 };
 
-const finishRound = (state: ScoresState, action: FinishRoundAction): ScoresState => {
-    const { currentRound } = action.payload;
+/**
+ * Iterates through the scores and adds raw + maki scoring to set totalScore per round
+ */
+const totalRoundScores = (state: ScoresState): ScoresState => {
+    // Update all player scores with total score
+    const newPlayersObject: Record<string, Player> = JSON.parse(JSON.stringify(state.players));
+
+    for (const playerScoreObject of Object.values(newPlayersObject)) {
+        const closingRoundScores = playerScoreObject.rounds[state.currentRound];
+        const { rawScore, makiScore } = closingRoundScores;
+        closingRoundScores.totalScore = rawScore + makiScore;
+    }
 
     return {
         ...state,
-        currentRound,
+        players: newPlayersObject,
+    };
+};
+
+const advanceRound = (state: ScoresState): ScoresState => {
+    return {
+        ...state,
+        currentRound: state.currentRound + 1,
     };
 };
 
@@ -84,8 +112,10 @@ const reducer = (state: ScoresState, action: Actions): ScoresState => {
             return createPlayer(state, action);
         case 'SET_SCORE':
             return setPlayerScore(state, action);
-        case 'FINISH_ROUND':
-            return finishRound(state, action);
+        case 'TOTAL_ROUND_SCORES':
+            return totalRoundScores(state);
+        case 'ADVANCE_ROUND':
+            return advanceRound(state);
         default:
             return state;
     }

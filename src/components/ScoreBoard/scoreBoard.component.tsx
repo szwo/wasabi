@@ -23,7 +23,7 @@ const ScoreBoard = (props: ScoreBoardProps) => {
                     const playerScore = scores.players[player].rounds[round];
                     return (
                         <DialogContentText key={player}>
-                            {player}: {playerScore?.rawScore}
+                            {player}: {playerScore?.totalScore}
                         </DialogContentText>
                     );
                 })}

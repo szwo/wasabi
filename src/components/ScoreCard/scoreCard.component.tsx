@@ -35,7 +35,6 @@ const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
     }, [eggNigiriScore, salmonNigiriScore, squidNigiriScore, dumplingScore, tempuraScore, sashimiScore]);
 
     useEffect(() => {
-        console.log('Resetting scores');
         resetScores();
     }, [currentRound]);
 

@@ -3,7 +3,13 @@ import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
 import { useScoresContext } from 'hooks';
-import { AddMakiScoreAction, CreatePlayerAction, FinishRoundAction, SetScoreAction } from 'providers/scores.actions';
+import {
+    AddMakiScoreAction,
+    CreatePlayerAction,
+    AdvanceRoundAction,
+    SetScoreAction,
+    TotalRoundScoreAction,
+} from 'providers/scores.actions';
 import React, { FC, useEffect, useState } from 'react';
 import './game.styles.scss';
 
@@ -87,7 +93,6 @@ const Game: FC = () => {
         const firstPlace = orderedKeys[0];
         const firstPlaceWinners = distribution[firstPlace] || [];
         if (firstPlaceWinners.length) {
-            console.log(firstPlaceWinners);
             addMakiPoints(6, firstPlaceWinners);
         }
 
@@ -100,6 +105,10 @@ const Game: FC = () => {
 
     const calculateRoundScores = () => {
         calculateMakiWinners();
+        const action: TotalRoundScoreAction = {
+            type: 'TOTAL_ROUND_SCORES',
+        };
+        dispatch(action);
         setShowScores(true);
     };
 
@@ -119,11 +128,8 @@ const Game: FC = () => {
 
     const closeScoreBoard = () => {
         setShowScores(false);
-        const action: FinishRoundAction = {
-            type: 'FINISH_ROUND',
-            payload: {
-                currentRound: currentRound + 1,
-            },
+        const action: AdvanceRoundAction = {
+            type: 'ADVANCE_ROUND',
         };
         dispatch(action);
     };
@@ -135,7 +141,7 @@ const Game: FC = () => {
     return (
         <div className="game-container">
             <h1 className="round-heading">Round {currentRound + 1}</h1>
-            <Button onClick={calculateRoundScores}>Test Maki Calc</Button>
+            <Button onClick={calculateRoundScores}>Finish Round</Button>
             <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={currentRound} scores={state} />
             <Grid container>
                 {players.map(player => (

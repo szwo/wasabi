@@ -18,6 +18,7 @@ type RoundScore = {
     rawScore: number;
     makiQty: number;
     makiScore: number;
+    totalScore: number;
 };
 
 type Player = {

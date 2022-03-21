@@ -25,9 +25,10 @@ export type SetScoreAction = {
     };
 };
 
-export type FinishRoundAction = {
-    type: 'FINISH_ROUND';
-    payload: {
-        currentRound: number;
-    };
+export type TotalRoundScoreAction = {
+    type: 'TOTAL_ROUND_SCORES';
+};
+
+export type AdvanceRoundAction = {
+    type: 'ADVANCE_ROUND';
 };
