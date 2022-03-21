@@ -7,6 +7,10 @@ export type AddMakiScoreAction = {
     };
 };
 
+export type AdvanceRoundAction = {
+    type: 'ADVANCE_ROUND';
+};
+
 export type CreatePlayerAction = {
     type: 'CREATE_PLAYER';
     payload: {
@@ -27,8 +31,4 @@ export type SetScoreAction = {
 
 export type TotalRoundScoreAction = {
     type: 'TOTAL_ROUND_SCORES';
-};
-
-export type AdvanceRoundAction = {
-    type: 'ADVANCE_ROUND';
 };

@@ -1,17 +1,17 @@
 import {
     AddMakiScoreAction,
+    AdvanceRoundAction,
     CreatePlayerAction,
     SetScoreAction,
     TotalRoundScoreAction,
-    AdvanceRoundAction,
 } from './scores.actions';
 
 export type Actions =
     | AddMakiScoreAction
+    | AdvanceRoundAction
     | CreatePlayerAction
     | SetScoreAction
-    | TotalRoundScoreAction
-    | AdvanceRoundAction;
+    | TotalRoundScoreAction;
 
 const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresState => {
     const { playerId, round, pointsToAdd } = action.payload;
@@ -30,6 +30,13 @@ const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresSta
                 rounds: roundsArrayClone,
             },
         },
+    };
+};
+
+const advanceRound = (state: ScoresState): ScoresState => {
+    return {
+        ...state,
+        currentRound: state.currentRound + 1,
     };
 };
 
@@ -93,13 +100,6 @@ const totalRoundScores = (state: ScoresState): ScoresState => {
     return {
         ...state,
         players: newPlayersObject,
-    };
-};
-
-const advanceRound = (state: ScoresState): ScoresState => {
-    return {
-        ...state,
-        currentRound: state.currentRound + 1,
     };
 };
 

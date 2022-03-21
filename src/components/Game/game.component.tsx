@@ -5,8 +5,8 @@ import GameOver from 'components/GameOver';
 import { useScoresContext } from 'hooks';
 import {
     AddMakiScoreAction,
-    CreatePlayerAction,
     AdvanceRoundAction,
+    CreatePlayerAction,
     SetScoreAction,
     TotalRoundScoreAction,
 } from 'providers/scores.actions';
