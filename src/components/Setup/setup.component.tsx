@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import Game from 'components/Game';
-import { CreatePlayerAction } from 'providers/scores.actions';
+import { CreatePlayerAction } from 'providers/Scores/scores.actions';
 import { useScoresContext } from 'hooks';
 
 const Setup: FC = () => {

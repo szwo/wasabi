@@ -8,7 +8,7 @@ import {
     AdvanceRoundAction,
     SetScoreAction,
     TotalRoundScoreAction,
-} from 'providers/scores.actions';
+} from 'providers/Scores/scores.actions';
 import React, { FC, useState } from 'react';
 import './game.styles.scss';
 

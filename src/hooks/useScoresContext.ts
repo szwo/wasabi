@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ScoresContext, ScoresContextType } from 'providers/scores.provider';
+import { ScoresContext, ScoresContextType } from 'providers/Scores/scores.provider';
 
 const useScoresContext = (): ScoresContextType => {
     const context = useContext(ScoresContext);

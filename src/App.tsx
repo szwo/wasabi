@@ -1,4 +1,4 @@
-import ScoresProvider from 'providers/scores.provider';
+import ScoresProvider from 'providers/Scores/scores.provider';
 import React from 'react';
 import Setup from 'components/Setup';
 
