@@ -6,8 +6,8 @@ import {
     SetScoreAction,
     CreatePlayerAction,
 } from 'providers/Scores/scores.actions';
-import useRoundContext from './useRoundContext';
-interface UseScoresContextType {
+import useRound from './useRound';
+interface useScoresType {
     scores: ScoresState;
     getPlayers: () => Record<string, Player>;
     addMakiPoints: (totalPoints: number, winners: string[]) => void;
@@ -16,14 +16,14 @@ interface UseScoresContextType {
     totalRoundScores: () => void;
 }
 
-const useScoresContext = (): UseScoresContextType => {
+const useScores = (): useScoresType => {
     const context = useContext(ScoresContext);
     if (!context) {
-        throw new Error('useScoresContext must be used within a ScoresProvider');
+        throw new Error('useScores must be used within a ScoresProvider');
     }
 
     const [scores, dispatch] = context;
-    const { currentRound } = useRoundContext();
+    const { currentRound } = useRound();
 
     // Selectors
     const getPlayers = () => scores.players;
@@ -97,4 +97,4 @@ const useScoresContext = (): UseScoresContextType => {
     };
 };
 
-export default useScoresContext;
+export default useScores;

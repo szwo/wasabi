@@ -2,13 +2,13 @@ import { Button, Grid } from '@mui/material';
 import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
-import { useRoundContext, useScoresContext } from 'hooks';
+import { useRound, useScores } from 'hooks';
 import React, { FC, useState } from 'react';
 import './game.styles.scss';
 
 const Game: FC = () => {
-    const { getPlayers, addMakiPoints, setIndividualScore, totalRoundScores } = useScoresContext();
-    const { currentRound, advanceRound } = useRoundContext();
+    const { getPlayers, addMakiPoints, setIndividualScore, totalRoundScores } = useScores();
+    const { currentRound, advanceRound } = useRound();
     const players = getPlayers();
     const playerIds = Object.keys(players);
     const [showScores, setShowScores] = useState(false);

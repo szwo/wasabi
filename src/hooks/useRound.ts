@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { RoundContext, RoundContextType } from 'providers/Round/round.provider';
 
-const useRoundContext = (): RoundContextType => {
+const useRound = (): RoundContextType => {
     const context = useContext(RoundContext);
     if (!context) {
-        throw new Error('useRoundContext must be used within a RoundProvider');
+        throw new Error('useRound must be used within a RoundProvider');
     }
 
     return context;
 };
 
-export default useRoundContext;
+export default useRound;

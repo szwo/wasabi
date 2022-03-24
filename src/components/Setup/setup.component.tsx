@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import Game from 'components/Game';
-import { useScoresContext } from 'hooks';
+import { useScores } from 'hooks';
 
 const Setup: FC = () => {
     const [showGame, setShowGame] = useState(false);
     const [playerName, setPlayerName] = useState('');
-    const { getPlayers, createPlayer } = useScoresContext();
+    const { getPlayers, createPlayer } = useScores();
     const players = getPlayers();
     const playerIds = Object.keys(players);
     const minimumPlayersMet = playerIds.length < 2;

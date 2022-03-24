@@ -1,7 +1,7 @@
 import Item from 'components/Item';
 import ScoreCardHeader from 'components/ScoreCardHeader';
 import items from 'helpers/items';
-import { useRoundContext } from 'hooks';
+import { useRound } from 'hooks';
 import React, { FC, useEffect, useState } from 'react';
 import './scoreCard.styles.scss';
 
@@ -13,7 +13,7 @@ interface ScoreCardProps {
 const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
     const { id, sendScore } = props;
 
-    const { currentRound } = useRoundContext();
+    const { currentRound } = useRound();
 
     const [eggNigiriScore, setEggNigiriScore] = useState(0);
     const [salmonNigiriScore, setSalmonNigiriScore] = useState(0);
