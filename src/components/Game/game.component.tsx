@@ -3,39 +3,17 @@ import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
 import { useRoundContext, useScoresContext } from 'hooks';
-import { AddMakiScoreAction, SetScoreAction, TotalRoundScoresAction } from 'providers/Scores/scores.actions';
 import React, { FC, useState } from 'react';
 import './game.styles.scss';
 
 const Game: FC = () => {
-    const [state, dispatch] = useScoresContext();
+    const { getPlayers, addMakiPoints, setIndividualScore, totalRoundScores } = useScoresContext();
     const { currentRound, advanceRound } = useRoundContext();
-    const players = Object.keys(state.players);
+    const players = getPlayers();
+    const playerIds = Object.keys(players);
     const [showScores, setShowScores] = useState(false);
 
-    const colSize = 12 / Object.keys(state.players).length;
-
-    /**
-     * Helper function for distributing points from Maki winners
-     * @param {number} totalPoints Total points to be distributed (6 for first, 3 for second)
-     * @param {Array<string>} winners List of player ids in each Maki group
-     */
-    const addMakiPoints = (totalPoints: number, winners: string[]): void => {
-        const points = Math.floor(totalPoints / winners.length);
-
-        for (const winnerId of winners) {
-            const action: AddMakiScoreAction = {
-                type: 'ADD_MAKI_SCORE',
-                payload: {
-                    playerId: winnerId,
-                    round: currentRound,
-                    pointsToAdd: points,
-                },
-            };
-
-            dispatch(action);
-        }
-    };
+    const colSize = 12 / playerIds.length;
 
     /**
      * Helper function for generating Maki frequency map to player IDs
@@ -44,7 +22,7 @@ const Game: FC = () => {
     const collectMakiCounts = (): Record<string, Array<string>> => {
         const result: Record<string, Array<string>> = {};
 
-        for (const [playerId, scores] of Object.entries(state.players)) {
+        for (const [playerId, scores] of Object.entries(players)) {
             const currentRoundScores = scores.rounds[currentRound];
             const roundMakiCount = currentRoundScores.makiQty;
             if (roundMakiCount > 0) {
@@ -85,28 +63,8 @@ const Game: FC = () => {
 
     const calculateRoundScores = () => {
         calculateMakiWinners();
-        const action: TotalRoundScoresAction = {
-            type: 'TOTAL_ROUND_SCORES',
-            payload: {
-                round: currentRound,
-            },
-        };
-        dispatch(action);
+        totalRoundScores();
         setShowScores(true);
-    };
-
-    const dispatchUpdateScore = (playerId: string, rawScore: number, makiQty: number, puddingQty: number): void => {
-        const action: SetScoreAction = {
-            type: 'SET_SCORE',
-            payload: {
-                playerId,
-                round: currentRound,
-                rawScore,
-                makiQty,
-                puddingQty,
-            },
-        };
-        dispatch(action);
     };
 
     const closeScoreBoard = () => {
@@ -122,11 +80,11 @@ const Game: FC = () => {
         <div className="game-container">
             <h1 className="round-heading">Round {currentRound + 1}</h1>
             <Button onClick={calculateRoundScores}>Finish Round</Button>
-            <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={currentRound} scores={state} />
+            <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={currentRound} players={players} />
             <Grid container>
-                {players.map((playerId: string) => (
+                {playerIds.map((playerId: string) => (
                     <Grid item key={playerId} xs={colSize}>
-                        <ScoreCard id={playerId} sendScore={dispatchUpdateScore} />
+                        <ScoreCard id={playerId} sendScore={setIndividualScore} />
                     </Grid>
                 ))}
             </Grid>

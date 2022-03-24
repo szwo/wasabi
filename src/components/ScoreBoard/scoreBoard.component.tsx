@@ -10,17 +10,17 @@ interface ScoreBoardProps {
     open: boolean;
     handleClose: () => void;
     round: number;
-    scores: ScoresState;
+    players: Record<string, Player>;
 }
 
 const ScoreBoard = (props: ScoreBoardProps) => {
-    const { open, handleClose, round, scores } = props;
+    const { open, handleClose, round, players } = props;
 
     const createPlayerScores = (): ReactNode => {
         return (
             <>
-                {Object.keys(scores.players).map(player => {
-                    const playerScore = scores.players[player].rounds[round];
+                {Object.keys(players).map(player => {
+                    const playerScore = players[player].rounds[round];
                     return (
                         <DialogContentText key={player}>
                             {player}: {playerScore?.totalScore}

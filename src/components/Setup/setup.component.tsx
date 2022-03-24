@@ -1,26 +1,21 @@
 import React, { FC, useState } from 'react';
 import Game from 'components/Game';
-import { CreatePlayerAction } from 'providers/Scores/scores.actions';
 import { useScoresContext } from 'hooks';
 
 const Setup: FC = () => {
     const [showGame, setShowGame] = useState(false);
     const [playerName, setPlayerName] = useState('');
-    const [state, dispatch] = useScoresContext();
-    const minimumPlayersMet = Object.keys(state.players).length < 2;
+    const { getPlayers, createPlayer } = useScoresContext();
+    const players = getPlayers();
+    const playerIds = Object.keys(players);
+    const minimumPlayersMet = playerIds.length < 2;
 
     const handleCreatePlayer = () => {
-        if (Object.prototype.hasOwnProperty.call(state.players, playerName)) {
+        if (Object.prototype.hasOwnProperty.call(players, playerName)) {
             // TODO: Display toast instead of console warning
             console.warn('name already taken');
         } else {
-            const action: CreatePlayerAction = {
-                type: 'CREATE_PLAYER',
-                payload: {
-                    playerId: playerName,
-                },
-            };
-            dispatch(action);
+            createPlayer(playerName);
             setPlayerName('');
         }
     };
@@ -39,9 +34,7 @@ const Setup: FC = () => {
                 </button>
             </div>
             <button onClick={() => setShowGame(true)} disabled={minimumPlayersMet}>
-                {minimumPlayersMet
-                    ? `Need at least ${2 - Object.keys(state.players).length} more players to play`
-                    : 'Start Game!'}
+                {minimumPlayersMet ? `Need at least ${2 - playerIds.length} more players to play` : 'Start Game!'}
             </button>
         </div>
     );
