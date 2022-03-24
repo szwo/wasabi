@@ -1,5 +1,4 @@
-import RoundProvider from 'providers/Round/round.provider';
-import ScoresProvider from 'providers/Scores/scores.provider';
+import { RoundProvider, ScoresProvider } from 'providers';
 import React from 'react';
 import Setup from 'components/Setup';
 
