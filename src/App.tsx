@@ -1,11 +1,11 @@
 import ScoresProvider from 'providers/scores.provider';
 import React from 'react';
-import Game from 'components/Game';
+import Setup from 'components/Setup';
 
 const App = () => {
     return (
         <ScoresProvider>
-            <Game />
+            <Setup />
         </ScoresProvider>
     );
 };

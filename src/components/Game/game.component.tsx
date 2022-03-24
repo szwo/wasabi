@@ -6,34 +6,19 @@ import { useScoresContext } from 'hooks';
 import {
     AddMakiScoreAction,
     AdvanceRoundAction,
-    CreatePlayerAction,
     SetScoreAction,
     TotalRoundScoreAction,
 } from 'providers/scores.actions';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import './game.styles.scss';
-
-const players = ['Mochi', 'Oreo']; // TODO: Should be dynamic
-const colSize = 12 / players.length;
 
 const Game: FC = () => {
     const [state, dispatch] = useScoresContext();
     const { currentRound } = state;
-    // const [round, setRound] = useState(0); // TODO: Advance me
+    const players = Object.keys(state.players);
     const [showScores, setShowScores] = useState(false);
 
-    useEffect(() => {
-        // TODO: Remove me when dynamic player creation is done
-        for (const player of players) {
-            const action: CreatePlayerAction = {
-                type: 'CREATE_PLAYER',
-                payload: {
-                    playerId: player,
-                },
-            };
-            dispatch(action);
-        }
-    }, []);
+    const colSize = 12 / Object.keys(state.players).length;
 
     /**
      * Helper function for distributing points from Maki winners
@@ -144,9 +129,9 @@ const Game: FC = () => {
             <Button onClick={calculateRoundScores}>Finish Round</Button>
             <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={currentRound} scores={state} />
             <Grid container>
-                {players.map(player => (
-                    <Grid item key={player} xs={colSize}>
-                        <ScoreCard id={player} sendScore={dispatchUpdateScore} />
+                {players.map((playerId: string) => (
+                    <Grid item key={playerId} xs={colSize}>
+                        <ScoreCard id={playerId} sendScore={dispatchUpdateScore} />
                     </Grid>
                 ))}
             </Grid>
