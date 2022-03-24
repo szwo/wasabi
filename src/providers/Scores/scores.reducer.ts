@@ -1,17 +1,6 @@
-import {
-    AddMakiScoreAction,
-    AdvanceRoundAction,
-    CreatePlayerAction,
-    SetScoreAction,
-    TotalRoundScoreAction,
-} from './scores.actions';
+import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction, TotalRoundScoresAction } from './scores.actions';
 
-export type Actions =
-    | AddMakiScoreAction
-    | AdvanceRoundAction
-    | CreatePlayerAction
-    | SetScoreAction
-    | TotalRoundScoreAction;
+export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction | TotalRoundScoresAction;
 
 const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresState => {
     const { playerId, round, pointsToAdd } = action.payload;
@@ -30,13 +19,6 @@ const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresSta
                 rounds: roundsArrayClone,
             },
         },
-    };
-};
-
-const advanceRound = (state: ScoresState): ScoresState => {
-    return {
-        ...state,
-        currentRound: state.currentRound + 1,
     };
 };
 
@@ -87,12 +69,13 @@ const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState
 /**
  * Iterates through the scores and adds raw + maki scoring to set totalScore per round
  */
-const totalRoundScores = (state: ScoresState): ScoresState => {
+const totalRoundScores = (state: ScoresState, action: TotalRoundScoresAction): ScoresState => {
+    const { round } = action.payload;
     // Update all player scores with total score
     const newPlayersObject: Record<string, Player> = JSON.parse(JSON.stringify(state.players));
 
     for (const playerScoreObject of Object.values(newPlayersObject)) {
-        const closingRoundScores = playerScoreObject.rounds[state.currentRound];
+        const closingRoundScores = playerScoreObject.rounds[round];
         const { rawScore, makiScore } = closingRoundScores;
         closingRoundScores.totalScore = rawScore + makiScore;
     }
@@ -113,9 +96,7 @@ const reducer = (state: ScoresState, action: Actions): ScoresState => {
         case 'SET_SCORE':
             return setPlayerScore(state, action);
         case 'TOTAL_ROUND_SCORES':
-            return totalRoundScores(state);
-        case 'ADVANCE_ROUND':
-            return advanceRound(state);
+            return totalRoundScores(state, action);
         default:
             return state;
     }

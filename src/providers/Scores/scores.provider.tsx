@@ -1,4 +1,4 @@
-import React, { createContext, ReactElement, useEffect, useReducer } from 'react';
+import React, { createContext, FC, ReactElement, useEffect, useReducer } from 'react';
 import ScoresReducer, { Actions } from './scores.reducer';
 
 export type ScoresContextType = [ScoresState, (type: Actions) => void]; // TODO: Type me
@@ -12,7 +12,7 @@ interface ProviderProps {
     children: ReactElement;
 }
 
-const ScoresProvider = (props: ProviderProps) => {
+const ScoresProvider: FC<ProviderProps> = (props: ProviderProps) => {
     const [state, dispatch] = useReducer(ScoresReducer, initialState);
 
     useEffect(() => {

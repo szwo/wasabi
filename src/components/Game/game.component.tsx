@@ -2,19 +2,14 @@ import { Button, Grid } from '@mui/material';
 import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
-import { useScoresContext } from 'hooks';
-import {
-    AddMakiScoreAction,
-    AdvanceRoundAction,
-    SetScoreAction,
-    TotalRoundScoreAction,
-} from 'providers/Scores/scores.actions';
+import { useRoundContext, useScoresContext } from 'hooks';
+import { AddMakiScoreAction, SetScoreAction, TotalRoundScoresAction } from 'providers/Scores/scores.actions';
 import React, { FC, useState } from 'react';
 import './game.styles.scss';
 
 const Game: FC = () => {
     const [state, dispatch] = useScoresContext();
-    const { currentRound } = state;
+    const { currentRound, advanceRound } = useRoundContext();
     const players = Object.keys(state.players);
     const [showScores, setShowScores] = useState(false);
 
@@ -90,8 +85,11 @@ const Game: FC = () => {
 
     const calculateRoundScores = () => {
         calculateMakiWinners();
-        const action: TotalRoundScoreAction = {
+        const action: TotalRoundScoresAction = {
             type: 'TOTAL_ROUND_SCORES',
+            payload: {
+                round: currentRound,
+            },
         };
         dispatch(action);
         setShowScores(true);
@@ -113,10 +111,7 @@ const Game: FC = () => {
 
     const closeScoreBoard = () => {
         setShowScores(false);
-        const action: AdvanceRoundAction = {
-            type: 'ADVANCE_ROUND',
-        };
-        dispatch(action);
+        advanceRound();
     };
 
     if (currentRound > 2) {

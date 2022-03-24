@@ -1,3 +1,4 @@
+import useRoundContext from './useRoundContext';
 import useScoresContext from './useScoresContext';
 
-export { useScoresContext };
+export { useRoundContext, useScoresContext };

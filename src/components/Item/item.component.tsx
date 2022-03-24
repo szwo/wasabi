@@ -1,5 +1,5 @@
 import { Grid, Paper, Typography } from '@mui/material';
-import { useScoresContext } from 'hooks';
+import { useRoundContext } from 'hooks';
 import React, { FC, useEffect, useState } from 'react';
 import QuantityPicker from '../QuantityPicker';
 import './item.styles.scss';
@@ -19,8 +19,7 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
     const [quantity, setQuantity] = useState(0);
     const [wasabiQuantity, setWasabiQuantity] = useState(0);
 
-    const [state] = useScoresContext();
-    const { currentRound } = state;
+    const { currentRound } = useRoundContext();
 
     useEffect(() => {
         let score = calculation(quantity);

@@ -1,12 +1,15 @@
+import RoundProvider from 'providers/Round/round.provider';
 import ScoresProvider from 'providers/Scores/scores.provider';
 import React from 'react';
 import Setup from 'components/Setup';
 
 const App = () => {
     return (
-        <ScoresProvider>
-            <Setup />
-        </ScoresProvider>
+        <RoundProvider>
+            <ScoresProvider>
+                <Setup />
+            </ScoresProvider>
+        </RoundProvider>
     );
 };
 

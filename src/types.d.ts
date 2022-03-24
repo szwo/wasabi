@@ -28,5 +28,4 @@ type Player = {
 
 type ScoresState = {
     players: Record<string, Player>;
-    currentRound: number;
 };
