@@ -2,6 +2,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { AppBar, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import ElevationScroll from './elevationScroll.component';
+
 interface ScoreCardHeaderProps {
     id: string;
     sendScore: () => void;

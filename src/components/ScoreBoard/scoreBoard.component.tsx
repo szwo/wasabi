@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { FC, ReactNode } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,7 +13,7 @@ interface ScoreBoardProps {
     players: Record<string, Player>;
 }
 
-const ScoreBoard = (props: ScoreBoardProps) => {
+const ScoreBoard: FC<ScoreBoardProps> = (props: ScoreBoardProps) => {
     const { open, handleClose, round, players } = props;
 
     const createPlayerScores = (): ReactNode => {
