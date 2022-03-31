@@ -52,6 +52,10 @@ const useScores = (): useScoresType => {
         }
     };
 
+    /**
+     * Dispatches an action to add a new player to ScoresContext
+     * @param {string} playerName unique id used to identify player
+     */
     const createPlayer = (playerName: string): void => {
         const action: CreatePlayerAction = {
             type: 'CREATE_PLAYER',
@@ -62,6 +66,13 @@ const useScores = (): useScoresType => {
         dispatch(action);
     };
 
+    /**
+     * Dispatches an action to submit an individual player's round scores
+     * @param {string} playerId Player to update
+     * @param {number} rawScore Total of static score values
+     * @param {number} makiQty Quantity of maki pieces collected during round
+     * @param {number} puddingQty Quantity of pudding pieces collected during round
+     */
     const setIndividualScore = (playerId: string, rawScore: number, makiQty: number, puddingQty: number): void => {
         const action: SetScoreAction = {
             type: 'SET_SCORE',
@@ -76,6 +87,9 @@ const useScores = (): useScoresType => {
         dispatch(action);
     };
 
+    /**
+     * Dispatches an action to calculate finalized round scores for all players
+     */
     const totalRoundScores = (): void => {
         const action: TotalRoundScoresAction = {
             type: 'TOTAL_ROUND_SCORES',

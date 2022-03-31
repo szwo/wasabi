@@ -2,7 +2,7 @@ import React, { createContext, FC, ReactElement, useEffect, useReducer } from 'r
 import ScoresReducer, { Actions } from './scores.reducer';
 
 export type ScoresContextType = [ScoresState, (type: Actions) => void];
-export const ScoresContext = createContext<ScoresContextType | undefined>(undefined);
+export const ScoresContext = createContext<ScoresContextType>({} as ScoresContextType);
 const initialState = {
     players: {},
     currentRound: 0,

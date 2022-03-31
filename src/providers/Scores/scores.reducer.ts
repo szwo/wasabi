@@ -2,6 +2,12 @@ import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction, TotalRoundScore
 
 export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction | TotalRoundScoresAction;
 
+/**
+ * Adds the round-relative maki scoring to an individual player's makiScore in context
+ * @param {ScoresState} state Current state
+ * @param {AddMakiScoreAction} action Dispatch action with payload
+ * @returns {ScoresState} Updated state
+ */
 const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresState => {
     const { playerId, round, pointsToAdd } = action.payload;
 
@@ -25,6 +31,12 @@ const addMakiScore = (state: ScoresState, action: AddMakiScoreAction): ScoresSta
     };
 };
 
+/**
+ * Creates a new player in context
+ * @param {ScoresState} state Current state
+ * @param {CreatePlayerAction} action Dispatch action with payload
+ * @returns {ScoresState} Updated state
+ */
 const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresState => {
     const { playerId } = action.payload;
     return {
@@ -45,7 +57,9 @@ const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresSta
 
 /**
  * Selects the desired player's rounds array, modifies the selected index, and sets the new state
- * @returns new Scores state
+ * @param {ScoresState} state Current state
+ * @param {SetScoresAction} action Dispatch action with payload
+ * @returns {ScoresState} Updated state
  */
 const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState => {
     const { playerId, round, rawScore, makiQty, puddingQty } = action.payload;
@@ -73,7 +87,10 @@ const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState
 };
 
 /**
- * Iterates through the scores and adds raw + maki scoring to set totalScore per round
+ * Iterates through each player in the ScoresState and calculates their totalScore for a given round
+ * @param {ScoresState} state Current state
+ * @param {TotalRoundScoresAction} action Dispatch action with payload
+ * @returns {ScoresState} Updated state
  */
 const totalRoundScores = (state: ScoresState, action: TotalRoundScoresAction): ScoresState => {
     const { round } = action.payload;

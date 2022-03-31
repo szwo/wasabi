@@ -17,7 +17,7 @@ const calculateDumplingScore = (quantity: number): number => {
 
 const items: Record<string, Item> = {
     eggNigiri: {
-        calculation: (quantity: number) => quantity * 1,
+        calculation: (quantity: number) => quantity,
         description: '1 point each',
         max: 5,
         name: 'Egg Nigiri',

@@ -4,8 +4,7 @@ export type RoundContextType = {
     currentRound: number;
     advanceRound: () => void;
 };
-export const RoundContext = createContext<RoundContextType | undefined>(undefined);
-
+export const RoundContext = createContext<RoundContextType>({} as RoundContextType);
 interface ProviderProps {
     children: ReactElement;
 }

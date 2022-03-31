@@ -13,6 +13,7 @@ const Game: FC = () => {
     const playerIds = Object.keys(players);
     const [showScores, setShowScores] = useState(false);
 
+    // Calculate the grid column sizes based on number of players in game
     const colSize = 12 / playerIds.length;
 
     /**
@@ -84,7 +85,7 @@ const Game: FC = () => {
             <Grid container>
                 {playerIds.map((playerId: string) => (
                     <Grid item key={playerId} xs={colSize}>
-                        <ScoreCard id={playerId} sendScore={setIndividualScore} />
+                        <ScoreCard playerId={playerId} sendScores={setIndividualScore} />
                     </Grid>
                 ))}
             </Grid>
