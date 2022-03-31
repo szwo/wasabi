@@ -1,9 +1,9 @@
-import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction, TotalRoundScoresAction } from './scores.actions';
+import { AddMakiScoreAction, CreatePlayerAction, SetScoreAction, TotalRoundScoreAction } from './scores.actions';
 
-export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction | TotalRoundScoresAction;
+export type Actions = AddMakiScoreAction | CreatePlayerAction | SetScoreAction | TotalRoundScoreAction;
 
 /**
- * Adds the round-relative maki scoring to an individual player's makiScore in context
+ * Adds the round-relative maki scoring to an individual player's makiScore
  * @param {ScoresState} state Current state
  * @param {AddMakiScoreAction} action Dispatch action with payload
  * @returns {ScoresState} Updated state
@@ -56,7 +56,7 @@ const createPlayer = (state: ScoresState, action: CreatePlayerAction): ScoresSta
 };
 
 /**
- * Selects the desired player's rounds array, modifies the selected index, and sets the new state
+ * Selects the desired player's rounds array, modifies the selected index
  * @param {ScoresState} state Current state
  * @param {SetScoresAction} action Dispatch action with payload
  * @returns {ScoresState} Updated state
@@ -87,26 +87,31 @@ const setPlayerScore = (state: ScoresState, action: SetScoreAction): ScoresState
 };
 
 /**
- * Iterates through each player in the ScoresState and calculates their totalScore for a given round
+ * Calculates the total score for a given round and player
  * @param {ScoresState} state Current state
  * @param {TotalRoundScoresAction} action Dispatch action with payload
  * @returns {ScoresState} Updated state
  */
-const totalRoundScores = (state: ScoresState, action: TotalRoundScoresAction): ScoresState => {
-    const { round } = action.payload;
-    // Update all player scores with total score
-    // TODO: Clean this up -- Find a way to do with without deep cloning object
-    const newPlayersObject: Record<string, Player> = JSON.parse(JSON.stringify(state.players));
+const totalRoundScore = (state: ScoresState, action: TotalRoundScoreAction): ScoresState => {
+    const { playerId, round } = action.payload;
 
-    for (const playerScoreObject of Object.values(newPlayersObject)) {
-        const closingRoundScores = playerScoreObject.rounds[round];
-        const { rawScore, makiScore } = closingRoundScores;
-        closingRoundScores.totalScore = rawScore + makiScore;
-    }
+    const newRounds: RoundScore[] = state.players[playerId].rounds.map((entry, index) => {
+        if (index === round) {
+            entry.totalScore = entry.rawScore + entry.makiScore;
+        }
+
+        return entry;
+    });
 
     return {
         ...state,
-        players: newPlayersObject,
+        players: {
+            ...state.players,
+            [playerId]: {
+                ...state.players[playerId],
+                rounds: newRounds,
+            },
+        },
     };
 };
 
@@ -119,8 +124,8 @@ const reducer = (state: ScoresState, action: Actions): ScoresState => {
             return createPlayer(state, action);
         case 'SET_SCORE':
             return setPlayerScore(state, action);
-        case 'TOTAL_ROUND_SCORES':
-            return totalRoundScores(state, action);
+        case 'TOTAL_ROUND_SCORE':
+            return totalRoundScore(state, action);
         default:
             return state;
     }

@@ -25,9 +25,10 @@ export type SetScoreAction = {
     };
 };
 
-export type TotalRoundScoresAction = {
-    type: 'TOTAL_ROUND_SCORES';
+export type TotalRoundScoreAction = {
+    type: 'TOTAL_ROUND_SCORE';
     payload: {
+        playerId: string;
         round: number;
     };
 };

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { ScoresContext } from 'providers/Scores/scores.provider';
 import {
     AddMakiScoreAction,
-    TotalRoundScoresAction,
+    TotalRoundScoreAction,
     SetScoreAction,
     CreatePlayerAction,
 } from 'providers/Scores/scores.actions';
@@ -88,17 +88,20 @@ const useScores = (): useScoresType => {
     };
 
     /**
-     * Dispatches an action to calculate finalized round scores for all players
+     * Dispatches an action to calculate finalized round scores for each player
      */
     const totalRoundScores = (): void => {
-        const action: TotalRoundScoresAction = {
-            type: 'TOTAL_ROUND_SCORES',
-            payload: {
-                round: currentRound,
-            },
-        };
+        for (const playerId of Object.keys(scores.players)) {
+            const action: TotalRoundScoreAction = {
+                type: 'TOTAL_ROUND_SCORE',
+                payload: {
+                    playerId,
+                    round: currentRound,
+                },
+            };
 
-        dispatch(action);
+            dispatch(action);
+        }
     };
 
     return {
