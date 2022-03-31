@@ -1,9 +1,12 @@
 import React, { FC, useState } from 'react';
-import Game from 'components/Game';
 import { useScores } from 'hooks';
 
-const Setup: FC = () => {
-    const [showGame, setShowGame] = useState(false);
+interface SetupProps {
+    showGame: () => void;
+}
+
+const Setup: FC<SetupProps> = (props: SetupProps) => {
+    const { showGame } = props;
     const [playerName, setPlayerName] = useState('');
     const { getPlayers, createPlayer } = useScores();
     const players = getPlayers();
@@ -20,10 +23,6 @@ const Setup: FC = () => {
         }
     };
 
-    if (showGame) {
-        return <Game />;
-    }
-
     return (
         <div className="setup">
             <p>Hello, I'm the setup component</p>
@@ -33,7 +32,7 @@ const Setup: FC = () => {
                     Create Player
                 </button>
             </div>
-            <button onClick={() => setShowGame(true)} disabled={minimumPlayersMet}>
+            <button onClick={showGame} disabled={minimumPlayersMet}>
                 {minimumPlayersMet ? `Need at least ${2 - playerIds.length} more players to play` : 'Start Game!'}
             </button>
         </div>
