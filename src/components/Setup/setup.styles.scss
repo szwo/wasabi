@@ -1,0 +1,24 @@
+.setup--container {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.setup--form-container {
+    margin: 30px;
+    width: 400px;
+}
+
+.setup--input-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    min-height: 2rem;
+}
+
+.setup--submit-container {
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+}
