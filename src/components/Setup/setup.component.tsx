@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
-import { useScores } from 'hooks';
+import { Button, Paper, TextField } from '@mui/material';
+import { useScores, useToast } from 'hooks';
 
 import './setup.styles.scss';
-import { Alert, Button, Paper, Snackbar, TextField } from '@mui/material';
 interface SetupProps {
     showGame: () => void;
 }
@@ -10,11 +10,8 @@ interface SetupProps {
 const Setup: FC<SetupProps> = (props: SetupProps) => {
     const { showGame } = props;
     const [playerName, setPlayerName] = useState('');
-    // TODO: Move Toasts to it's own component
-    // TODO: Adopt recommended pattern for multiple toasts: https://mui.com/components/snackbars/#consecutive-snackbars
-    const [showFailureToast, setShowFailureToast] = useState(false);
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
     const { getPlayers, createPlayer } = useScores();
+    const { displayToast } = useToast();
     const players = getPlayers();
     const playerIds = Object.keys(players);
     const minimumPlayersMet = playerIds.length < 2;
@@ -23,40 +20,12 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
 
     const handleCreatePlayer = () => {
         if (Object.prototype.hasOwnProperty.call(players, playerName)) {
-            handleShowFailureToast();
+            displayToast('error', 'Name already taken!');
         } else {
             createPlayer(playerName);
-            handleShowSuccessToast();
+            displayToast('success', 'New player added!');
             setPlayerName('');
         }
-    };
-
-    const handleShowSuccessToast = () => {
-        setShowFailureToast(false);
-        setShowSuccessToast(false);
-        setShowSuccessToast(true);
-    };
-
-    const handleShowFailureToast = () => {
-        setShowFailureToast(false);
-        setShowSuccessToast(false);
-        setShowFailureToast(true);
-    };
-
-    const handleSuccessToastClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setShowSuccessToast(false);
-    };
-
-    const handleFailureToastClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setShowFailureToast(false);
     };
 
     return (
@@ -95,18 +64,12 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                         <h2>Players in this game:</h2>
                         <ol>
                             {playerIds.map(playerId => (
-                                <li>{playerId}</li>
+                                <li key={playerId}>{playerId}</li>
                             ))}
                         </ol>
                     </div>
                 </div>
             </Paper>
-            <Snackbar open={showSuccessToast} onClose={handleSuccessToastClose} autoHideDuration={6000}>
-                <Alert severity="success">New player added!</Alert>
-            </Snackbar>
-            <Snackbar open={showFailureToast} onClose={handleFailureToastClose} autoHideDuration={6000}>
-                <Alert severity="error">Player name already taken! Try something else.</Alert>
-            </Snackbar>
         </div>
     );
 };
