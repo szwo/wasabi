@@ -1,7 +1,8 @@
-import { RoundProvider, ScoresProvider } from 'providers';
+import { RoundProvider, ScoresProvider, ToastProvider } from 'providers';
 import React, { useState } from 'react';
 import Setup from 'components/Setup';
 import Game from 'components/Game';
+import Toast from 'components/Toast';
 
 const App = () => {
     const [showGame, setShowGame] = useState(false);
@@ -11,7 +12,18 @@ const App = () => {
         </RoundProvider>
     );
 
-    return <ScoresProvider>{showGame ? gameComponent : <Setup showGame={() => setShowGame(true)} />}</ScoresProvider>;
+    return (
+        <>
+            <ToastProvider>
+                <>
+                    <ScoresProvider>
+                        {showGame ? gameComponent : <Setup showGame={() => setShowGame(true)} />}
+                    </ScoresProvider>
+                    <Toast />
+                </>
+            </ToastProvider>
+        </>
+    );
 };
 
 export default App;
