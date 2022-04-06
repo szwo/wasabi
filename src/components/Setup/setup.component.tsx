@@ -84,6 +84,13 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                             Create Player
                         </Button>
                     </div>
+                    <div className="setup--submit-container">
+                        <Button variant="contained" color="success" onClick={showGame} disabled={minimumPlayersMet}>
+                            {minimumPlayersMet
+                                ? `Need at least ${2 - playerIds.length} more players to play`
+                                : 'Start Game!'}
+                        </Button>
+                    </div>
                     <div className="setup--players-list">
                         <h2>Players in this game:</h2>
                         <ol>
@@ -91,13 +98,6 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                                 <li>{playerId}</li>
                             ))}
                         </ol>
-                    </div>
-                    <div className="setup--submit-container">
-                        <Button variant="contained" color="success" onClick={showGame} disabled={minimumPlayersMet}>
-                            {minimumPlayersMet
-                                ? `Need at least ${2 - playerIds.length} more players to play`
-                                : 'Start Game!'}
-                        </Button>
                     </div>
                 </div>
             </Paper>
