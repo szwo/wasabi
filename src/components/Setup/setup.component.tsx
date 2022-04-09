@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, KeyboardEventHandler, useState } from 'react';
 import { Button, Paper, TextField } from '@mui/material';
 import { useScores, useToast } from 'hooks';
 
@@ -28,6 +28,12 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
         }
     };
 
+    const handleKeydown: KeyboardEventHandler = e => {
+        if (e.code === 'Enter') {
+            handleCreatePlayer();
+        }
+    };
+
     return (
         <div className="setup--container">
             <Paper elevation={3}>
@@ -43,6 +49,7 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                             value={playerName}
                             error={playerName.length > 0 && !isValidInput}
                             onChange={e => setPlayerName(e.target.value)}
+                            onKeyDown={e => handleKeydown(e)}
                         />
                         <Button
                             className="setup--input-btn"
