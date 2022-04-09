@@ -1,4 +1,13 @@
-.round-heading {
+.game--round-heading {
     margin-top: 0;
     color: #ffffff;
+}
+
+.game--scorecard-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.game--scorecard-item {
+    flex-grow: 1;
 }

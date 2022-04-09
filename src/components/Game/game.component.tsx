@@ -1,4 +1,4 @@
-import { Button, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
@@ -12,9 +12,6 @@ const Game: FC = () => {
     const players = getPlayers();
     const playerIds = Object.keys(players);
     const [showScores, setShowScores] = useState(false);
-
-    // Calculate the grid column sizes based on number of players in game
-    const colSize = 12 / playerIds.length;
 
     /**
      * Helper function for generating Maki frequency map to player IDs
@@ -78,18 +75,18 @@ const Game: FC = () => {
     }
 
     return (
-        <div className="game-container">
-            <h1 className="round-heading">Round {currentRound + 1}</h1>
+        <>
+            <h1 className="game--round-heading">Round {currentRound + 1}</h1>
             <Button onClick={calculateRoundScores}>Finish Round</Button>
             <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={currentRound} players={players} />
-            <Grid container>
+            <div className="game--scorecard-container">
                 {playerIds.map((playerId: string) => (
-                    <Grid item key={playerId} xs={colSize}>
+                    <div className="game--scorecard-item">
                         <ScoreCard playerId={playerId} sendScores={setIndividualScore} />
-                    </Grid>
+                    </div>
                 ))}
-            </Grid>
-        </div>
+            </div>
+        </>
     );
 };
 
