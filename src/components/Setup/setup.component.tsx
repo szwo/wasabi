@@ -28,7 +28,7 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
         }
     };
 
-    const handleKeydown: KeyboardEventHandler = e => {
+    const handleEnterKeydown: KeyboardEventHandler = e => {
         if (e.code === 'Enter') {
             handleCreatePlayer();
         }
@@ -49,7 +49,7 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                             value={playerName}
                             error={playerName.length > 0 && !isValidInput}
                             onChange={e => setPlayerName(e.target.value)}
-                            onKeyDown={e => handleKeydown(e)}
+                            onKeyDown={e => handleEnterKeydown(e)}
                         />
                         <Button
                             className="setup--input-btn"
