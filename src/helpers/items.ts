@@ -39,7 +39,7 @@ const items: Record<string, Item> = {
     },
     dumpling: {
         calculation: calculateDumplingScore,
-        description: 'Variable scoring based on quantity',
+        description: '1 | 3 | 6 | 10 | 15',
         max: 5,
         name: 'Dumpling',
         wasabiEligible: false,
