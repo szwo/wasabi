@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { useRound } from 'hooks';
 import React, { FC, useEffect, useState } from 'react';
 import QuantityPicker from '../QuantityPicker';
@@ -37,35 +37,33 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
     }, [currentRound]);
 
     return (
-        <div className="card-container">
+        <div className="item--paper-container">
             <Paper elevation={3}>
-                <div className="paper-contents">
-                    <Grid container>
-                        <Grid item xs={4}>
-                            <Typography gutterBottom variant="h5">
-                                {name}
-                            </Typography>
-                            <div className="item-total">Total: {score}</div>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Grid container>
-                                <Grid item xs={wasabiEligible ? 6 : 12}>
-                                    <div className="description">{description}</div>
-                                    <QuantityPicker max={max} quantity={quantity} setQuantity={setQuantity} />
-                                </Grid>
-                                {wasabiEligible && (
-                                    <Grid item xs={6}>
-                                        <div className="description">x3 with Wasabi</div>
-                                        <QuantityPicker
-                                            max={max}
-                                            quantity={wasabiQuantity}
-                                            setQuantity={setWasabiQuantity}
-                                        />
-                                    </Grid>
-                                )}
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                <div className="item--container">
+                    <div className="item--total">
+                        <Typography gutterBottom variant="h5">
+                            {name}
+                        </Typography>
+                        <div className="item-total">Total: {score}</div>
+                    </div>
+                    <div className="item--picker-container">
+                        <div className="item--description">{description}</div>
+                        <div className="item--picker">
+                            <QuantityPicker max={max} quantity={quantity} setQuantity={setQuantity} />
+                        </div>
+                        {wasabiEligible && (
+                            <div className="item--wasabi-container">
+                                <div className="item--description">x3 with Wasabi</div>
+                                <div className="item--picker">
+                                    <QuantityPicker
+                                        max={max}
+                                        quantity={wasabiQuantity}
+                                        setQuantity={setWasabiQuantity}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </Paper>
         </div>
