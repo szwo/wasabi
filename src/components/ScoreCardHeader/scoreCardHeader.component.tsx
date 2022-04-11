@@ -14,25 +14,23 @@ const ScoreCardHeader: FC<ScoreCardHeaderProps> = (props: ScoreCardHeaderProps) 
     const { id, totalScore, submitted, sendScore } = props;
 
     return (
-        <div className="scorecard-header">
-            <ElevationScroll>
-                <AppBar position="static">
-                    <Toolbar>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            {id}'s Score: {totalScore}
-                        </Typography>
-                        {submitted && (
-                            <IconButton>
-                                <CheckCircleIcon sx={{ color: '#ffffff' }} />
-                            </IconButton>
-                        )}
-                        <Button color="inherit" variant="outlined" onClick={sendScore} disabled={submitted}>
-                            Submit Scores
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-            </ElevationScroll>
-        </div>
+        <ElevationScroll>
+            <AppBar position="sticky">
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        {id}'s Score: {totalScore}
+                    </Typography>
+                    {submitted && (
+                        <IconButton>
+                            <CheckCircleIcon sx={{ color: '#ffffff' }} />
+                        </IconButton>
+                    )}
+                    <Button color="inherit" variant="outlined" onClick={sendScore} disabled={submitted}>
+                        Submit
+                    </Button>
+                </Toolbar>
+            </AppBar>
+        </ElevationScroll>
     );
 };
 
