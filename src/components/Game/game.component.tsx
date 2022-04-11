@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
@@ -76,8 +76,16 @@ const Game: FC = () => {
 
     return (
         <>
-            <h1 className="game--round-heading">Round {currentRound + 1}</h1>
-            <Button onClick={calculateRoundScores}>Finish Round</Button>
+            <AppBar className="game--round-heading" position="static">
+                <Toolbar>
+                    <Typography variant="h2" component="div" sx={{ flexGrow: 1 }}>
+                        Round {currentRound + 1}
+                    </Typography>
+                    <Button color="inherit" variant="outlined" onClick={calculateRoundScores}>
+                        Finish Round
+                    </Button>
+                </Toolbar>
+            </AppBar>
             <ScoreBoard open={showScores} handleClose={closeScoreBoard} round={currentRound} players={players} />
             <div className="game--scorecard-container">
                 {playerIds.map((playerId: string) => (
