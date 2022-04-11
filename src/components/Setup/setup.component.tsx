@@ -3,7 +3,7 @@ import { Button, Paper, TextField } from '@mui/material';
 import { useScores, useToast } from 'hooks';
 
 import './setup.styles.scss';
-interface SetupProps {
+export interface SetupProps {
     showGame: () => void;
 }
 
@@ -43,6 +43,7 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                     <div className="setup--input-container">
                         <TextField
                             className="setup--input-field"
+                            data-testid="setup--input-field"
                             required
                             label="Player Name"
                             variant="outlined"
@@ -53,6 +54,7 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                         />
                         <Button
                             className="setup--input-btn"
+                            data-testid="setup--create-btn"
                             variant="contained"
                             onClick={handleCreatePlayer}
                             disabled={playerName.length === 0 || !isValidInput}
@@ -61,7 +63,13 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                         </Button>
                     </div>
                     <div className="setup--submit-container">
-                        <Button variant="contained" color="success" onClick={showGame} disabled={minimumPlayersMet}>
+                        <Button
+                            data-testid="setup--start-game-btn"
+                            variant="contained"
+                            color="success"
+                            onClick={showGame}
+                            disabled={minimumPlayersMet}
+                        >
                             {minimumPlayersMet
                                 ? `Need at least ${2 - playerIds.length} more players to play`
                                 : 'Start Game!'}
@@ -69,9 +77,11 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                     </div>
                     <div className="setup--players-list">
                         <h2>Players in this game:</h2>
-                        <ol>
+                        <ol data-testid="setup--players-list">
                             {playerIds.map(playerId => (
-                                <li key={playerId}>{playerId}</li>
+                                <li key={playerId} data-testid={`setup--player-${playerId}`}>
+                                    {playerId}
+                                </li>
                             ))}
                         </ol>
                     </div>
