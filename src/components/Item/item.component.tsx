@@ -40,11 +40,11 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
         <div className="item--paper-container">
             <Paper elevation={3}>
                 <div className="item--container">
-                    <div className="item--total">
+                    <div className="item--header">
                         <Typography gutterBottom variant="h5">
                             {name}
                         </Typography>
-                        <div className="item-total">Total: {score}</div>
+                        <div className="item--total">Total: {score}</div>
                     </div>
                     <div className="item--picker-container">
                         <div className="item--description">{description}</div>
