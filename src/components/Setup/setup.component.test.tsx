@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup';
 import { RoundProvider } from 'providers';
 import React from 'react';
@@ -10,7 +10,7 @@ jest.mock('hooks');
 
 describe('Setup', () => {
     const mockProps: SetupProps = {
-        showGame: jest.fn(),
+        startGame: jest.fn(),
     };
     const mockCreatePlayer = jest.fn();
 
@@ -18,13 +18,15 @@ describe('Setup', () => {
 
     beforeEach(() => {
         (useScores as jest.Mock).mockReturnValue({
-            getPlayers: jest.fn().mockReturnValue({}),
             createPlayer: mockCreatePlayer,
         });
         (useToast as jest.Mock).mockReturnValue({
             displayToast: jest.fn(),
         });
-        user = userEvent.setup();
+
+        user = userEvent.setup({
+            pointerEventsCheck: PointerEventsCheckLevel.EachTarget,
+        });
         render(
             <RoundProvider>
                 <Setup {...mockProps} />
@@ -69,8 +71,73 @@ describe('Setup', () => {
                 expect(submitElement).not.toBeDisabled();
 
                 await act(() => user.click(submitElement));
+                expect(screen.getByTestId(`setup--player-${validPlayerName}`)).toBeInTheDocument();
+            });
 
-                expect(mockCreatePlayer).toHaveBeenCalledWith(validPlayerName);
+            it('should allow the player to create a valid player name and submit via Enter key', async () => {
+                const inputElement = screen.getByRole('textbox');
+                const submitElement = screen.getByTestId('setup--create-btn');
+
+                await act(() => user.type(inputElement, validPlayerName));
+
+                expect(inputElement).toHaveValue(validPlayerName);
+                expect(submitElement).not.toBeDisabled();
+
+                await act(() => user.keyboard('[Enter]'));
+                expect(screen.getByTestId(`setup--player-${validPlayerName}`)).toBeInTheDocument();
+            });
+        });
+
+        describe('Starting the game', () => {
+            const addPlayerHelper = async (playerName: string) => {
+                const inputElement = screen.getByRole('textbox');
+                const submitElement = screen.getByTestId('setup--create-btn');
+
+                await act(() => user.type(inputElement, playerName));
+                await act(() => user.click(submitElement));
+            };
+
+            const getButtonTextHelper = (playerCount: number) =>
+                `Need at least ${2 - playerCount} more players to play`;
+
+            it('should not allow the game to be started if minimum players are not met', async () => {
+                const startElement = screen.getByTestId('setup--start-game-btn');
+
+                expect(startElement).toBeDisabled();
+                expect(screen.getByText(getButtonTextHelper(0))).toBeInTheDocument();
+
+                await addPlayerHelper('player1');
+                expect(startElement).toBeDisabled();
+                expect(screen.getByText(getButtonTextHelper(1))).toBeInTheDocument();
+            });
+
+            it('should allow the game to be started if minimum players are met', async () => {
+                const startElement = screen.getByTestId('setup--start-game-btn');
+
+                expect(startElement).toBeDisabled();
+                expect(screen.getByText(getButtonTextHelper(0))).toBeInTheDocument();
+
+                await addPlayerHelper('player1');
+                expect(startElement).toBeDisabled();
+                expect(screen.getByText(getButtonTextHelper(1))).toBeInTheDocument();
+
+                await addPlayerHelper('player2');
+                expect(startElement).not.toBeDisabled();
+                expect(screen.queryByText(getButtonTextHelper(2))).not.toBeInTheDocument();
+                expect(screen.getByText('Start Game!')).toBeInTheDocument();
+            });
+
+            it('should create players when Start Game button is pressed', async () => {
+                const playersToAdd = ['player1', 'player2'];
+
+                for (const player of playersToAdd) {
+                    await addPlayerHelper(player);
+                }
+
+                await act(() => user.click(screen.getByText('Start Game!')));
+                expect(mockCreatePlayer).toHaveBeenCalledTimes(playersToAdd.length);
+                expect(mockCreatePlayer).toHaveBeenNthCalledWith(1, playersToAdd[0]);
+                expect(mockCreatePlayer).toHaveBeenNthCalledWith(2, playersToAdd[1]);
             });
         });
     });
