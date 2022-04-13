@@ -17,7 +17,7 @@ const App = () => {
             <ToastProvider>
                 <>
                     <ScoresProvider>
-                        {showGame ? gameComponent : <Setup showGame={() => setShowGame(true)} />}
+                        {showGame ? gameComponent : <Setup startGame={() => setShowGame(true)} />}
                     </ScoresProvider>
                     <Toast />
                 </>
