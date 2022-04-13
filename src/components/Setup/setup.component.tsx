@@ -4,25 +4,25 @@ import { useScores, useToast } from 'hooks';
 
 import './setup.styles.scss';
 export interface SetupProps {
-    showGame: () => void;
+    startGame: () => void;
 }
 
 const Setup: FC<SetupProps> = (props: SetupProps) => {
-    const { showGame } = props;
+    const { startGame } = props;
     const [playerName, setPlayerName] = useState('');
-    const { getPlayers, createPlayer } = useScores();
+    const [players, setPlayers] = useState<Array<string>>([]);
+    const { createPlayer } = useScores();
     const { displayToast } = useToast();
-    const players = getPlayers();
-    const playerIds = Object.keys(players);
-    const minimumPlayersMet = playerIds.length < 2;
+
+    const minimumPlayersMet = players.length > 1;
     const alphanumericRegex = new RegExp(/^[A-Za-z0-9]+$/);
     const isValidInput = alphanumericRegex.test(playerName);
 
     const handleCreatePlayer = () => {
-        if (Object.prototype.hasOwnProperty.call(players, playerName)) {
+        if (players.includes(playerName)) {
             displayToast('error', 'Name already taken!');
         } else {
-            createPlayer(playerName);
+            setPlayers(current => [...current, playerName]);
             displayToast('success', 'New player added!');
             setPlayerName('');
         }
@@ -32,6 +32,14 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
         if (e.code === 'Enter') {
             handleCreatePlayer();
         }
+    };
+
+    const handleStartGame = () => {
+        for (const player of players) {
+            createPlayer(player);
+        }
+
+        startGame();
     };
 
     return (
@@ -67,18 +75,18 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                             data-testid="setup--start-game-btn"
                             variant="contained"
                             color="success"
-                            onClick={showGame}
-                            disabled={minimumPlayersMet}
+                            onClick={handleStartGame}
+                            disabled={!minimumPlayersMet}
                         >
                             {minimumPlayersMet
-                                ? `Need at least ${2 - playerIds.length} more players to play`
-                                : 'Start Game!'}
+                                ? 'Start Game!'
+                                : `Need at least ${2 - players.length} more players to play`}
                         </Button>
                     </div>
                     <div className="setup--players-list">
                         <h2>Players in this game:</h2>
                         <ol data-testid="setup--players-list">
-                            {playerIds.map(playerId => (
+                            {players.map(playerId => (
                                 <li key={playerId} data-testid={`setup--player-${playerId}`}>
                                     {playerId}
                                 </li>
