@@ -23,7 +23,7 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
             displayToast('error', 'Name already taken!');
         } else {
             setPlayers(current => [...current, playerName]);
-            displayToast('success', 'New player added!');
+            displayToast('success', `Welcome, ${playerName}!`);
             setPlayerName('');
         }
     };
