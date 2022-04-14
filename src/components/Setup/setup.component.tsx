@@ -51,7 +51,6 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                     <div className="setup--input-container">
                         <TextField
                             className="setup--input-field"
-                            data-testid="setup--input-field"
                             required
                             label="Player Name"
                             variant="outlined"
@@ -85,7 +84,7 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
                     </div>
                     <div className="setup--players-list">
                         <h2>Players in this game:</h2>
-                        <ol data-testid="setup--players-list">
+                        <ol>
                             {players.map(playerId => (
                                 <li key={playerId} data-testid={`setup--player-${playerId}`}>
                                     {playerId}
