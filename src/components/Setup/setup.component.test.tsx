@@ -1,7 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup';
-import { RoundProvider } from 'providers';
 import React from 'react';
 import Setup, { SetupProps } from './setup.component';
 import { useScores, useToast } from 'hooks';
@@ -13,6 +12,14 @@ describe('Setup', () => {
         startGame: jest.fn(),
     };
     const mockCreatePlayer = jest.fn();
+    const mockDisplayToast = jest.fn();
+    const addPlayerHelper = async (playerName: string) => {
+        const inputElement = screen.getByRole('textbox');
+        const submitElement = screen.getByTestId('setup--create-btn');
+
+        await act(() => user.type(inputElement, playerName));
+        await act(() => user.click(submitElement));
+    };
 
     let user: UserEvent;
 
@@ -21,17 +28,13 @@ describe('Setup', () => {
             createPlayer: mockCreatePlayer,
         });
         (useToast as jest.Mock).mockReturnValue({
-            displayToast: jest.fn(),
+            displayToast: mockDisplayToast,
         });
 
         user = userEvent.setup({
             pointerEventsCheck: PointerEventsCheckLevel.EachTarget,
         });
-        render(
-            <RoundProvider>
-                <Setup {...mockProps} />
-            </RoundProvider>
-        );
+        render(<Setup {...mockProps} />);
     });
 
     describe('Creating a player', () => {
@@ -61,7 +64,7 @@ describe('Setup', () => {
         describe('Valid input', () => {
             const validPlayerName = 'hello';
 
-            it('should allow the player to create a valid player name', async () => {
+            it('should allow the player to create a valid player name via button click', async () => {
                 const inputElement = screen.getByRole('textbox');
                 const submitElement = screen.getByTestId('setup--create-btn');
 
@@ -71,6 +74,7 @@ describe('Setup', () => {
                 expect(submitElement).not.toBeDisabled();
 
                 await act(() => user.click(submitElement));
+                expect(mockDisplayToast).toHaveBeenCalledWith('success', `Welcome, ${validPlayerName}!`);
                 expect(screen.getByTestId(`setup--player-${validPlayerName}`)).toBeInTheDocument();
             });
 
@@ -84,20 +88,22 @@ describe('Setup', () => {
                 expect(submitElement).not.toBeDisabled();
 
                 await act(() => user.keyboard('[Enter]'));
+                expect(mockDisplayToast).toHaveBeenCalledWith('success', `Welcome, ${validPlayerName}!`);
                 expect(screen.getByTestId(`setup--player-${validPlayerName}`)).toBeInTheDocument();
+            });
+        });
+
+        describe('Taken name', () => {
+            it('should now allow the player to create with a name that has already been taken', async () => {
+                await addPlayerHelper('player1');
+                await addPlayerHelper('player1');
+                expect(mockDisplayToast).toHaveBeenCalledWith('error', `Name already taken!`);
+                expect(screen.getAllByTestId(`setup--player-player1`)).toHaveLength(1);
             });
         });
     });
 
     describe('Starting the game', () => {
-        const addPlayerHelper = async (playerName: string) => {
-            const inputElement = screen.getByRole('textbox');
-            const submitElement = screen.getByTestId('setup--create-btn');
-
-            await act(() => user.type(inputElement, playerName));
-            await act(() => user.click(submitElement));
-        };
-
         const getButtonTextHelper = (playerCount: number) => `Need at least ${2 - playerCount} more players to play`;
 
         it('should not allow the game to be started if minimum players are not met', async () => {
