@@ -46,13 +46,13 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
                         </Typography>
                         <div className="item--total">Total: {score}</div>
                     </div>
-                    <div className="item--picker-container">
+                    <div className="item--picker-container" data-testid="item--picker-container">
                         <div className="item--description">{description}</div>
                         <div className="item--picker">
                             <QuantityPicker max={max} quantity={quantity} setQuantity={setQuantity} />
                         </div>
                         {wasabiEligible && (
-                            <div className="item--wasabi-container">
+                            <div className="item--wasabi-container" data-testid="item--wasabi-container">
                                 <div className="item--description">x3 with Wasabi</div>
                                 <div className="item--picker">
                                     <QuantityPicker
