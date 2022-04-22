@@ -1,4 +1,4 @@
-# Wasabi
+# Wasabi (work in progress)
 
 A client-side application created for tracking Sushi Go! scores. Built with love using React, TypeScript, Sass, and bootstrapped via CRA.
 
