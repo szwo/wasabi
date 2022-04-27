@@ -3,6 +3,7 @@ import ScoreBoard from 'components/ScoreBoard';
 import ScoreCard from 'components/ScoreCard';
 import GameOver from 'components/GameOver';
 import { useRound, useScores } from 'hooks';
+import { IndividualRoundScore } from 'hooks/useScores';
 import React, { FC, useState } from 'react';
 import './game.styles.scss';
 
@@ -12,6 +13,7 @@ const Game: FC = () => {
     const players = getPlayers();
     const playerIds = Object.keys(players);
     const [showScores, setShowScores] = useState(false);
+    const [recordedScores, setRecordedScores] = useState<Array<IndividualRoundScore>>([]);
 
     /**
      * Helper function for generating Maki frequency map to player IDs
@@ -59,8 +61,23 @@ const Game: FC = () => {
         }
     };
 
+    /**
+     * Queue up individual round score to be submitted when round completes
+     * @param {IndividualRoundScore} score object for individual player per round
+     */
+    const recordIndividualScore = (score: IndividualRoundScore) => {
+        setRecordedScores(currentScores => [...currentScores, score]);
+    };
+
+    /**
+     * Submits all recorded scores to state, perform final calculations, then shows scoreboard
+     */
     const calculateRoundScores = () => {
-        calculateMakiWinners();
+        for (const score of recordedScores) {
+            setIndividualScore(score);
+        }
+
+        calculateMakiWinners(); // TODO: Calculate this locally before setting to context
         totalRoundScores();
         setShowScores(true);
     };
@@ -81,7 +98,12 @@ const Game: FC = () => {
                     <Typography variant="h2" component="div" sx={{ flexGrow: 1 }}>
                         Round {currentRound + 1}
                     </Typography>
-                    <Button color="inherit" variant="outlined" onClick={calculateRoundScores}>
+                    <Button
+                        color="inherit"
+                        variant="outlined"
+                        onClick={calculateRoundScores}
+                        disabled={recordedScores.length < playerIds.length}
+                    >
                         Finish Round
                     </Button>
                 </Toolbar>
@@ -90,7 +112,7 @@ const Game: FC = () => {
             <div className="game--scorecard-container">
                 {playerIds.map((playerId: string) => (
                     <div className="game--scorecard-item">
-                        <ScoreCard playerId={playerId} sendScores={setIndividualScore} />
+                        <ScoreCard playerId={playerId} sendScores={recordIndividualScore} />
                     </div>
                 ))}
             </div>

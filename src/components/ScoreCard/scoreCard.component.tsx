@@ -2,12 +2,13 @@ import Item from 'components/Item';
 import ScoreCardHeader from 'components/ScoreCardHeader';
 import items from 'helpers/items';
 import { useRound } from 'hooks';
-import React, { FC, useEffect, useState } from 'react';
+import { IndividualRoundScore } from 'hooks/useScores';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import './scoreCard.styles.scss';
 
 interface ScoreCardProps {
     playerId: string;
-    sendScores: (playerId: string, rawScore: number, makiQty: number, puddingQty: number) => void;
+    sendScores: (scores: IndividualRoundScore) => void;
 }
 
 const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
@@ -23,15 +24,12 @@ const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
     const [sashimiScore, setSashimiScore] = useState(0);
     const [makiScore, setMakiScore] = useState(0);
     const [puddingScore, setPuddingScore] = useState(0);
-
-    const [rawScore, setRawScore] = useState(0);
     const [submitted, setSubmitted] = useState(false);
 
-    useEffect(() => {
-        const total =
-            eggNigiriScore + salmonNigiriScore + squidNigiriScore + dumplingScore + tempuraScore + sashimiScore;
-        setRawScore(total);
-    }, [eggNigiriScore, salmonNigiriScore, squidNigiriScore, dumplingScore, tempuraScore, sashimiScore]);
+    const total = useMemo(
+        () => eggNigiriScore + salmonNigiriScore + squidNigiriScore + dumplingScore + tempuraScore + sashimiScore,
+        [eggNigiriScore, salmonNigiriScore, squidNigiriScore, dumplingScore, tempuraScore, sashimiScore]
+    );
 
     useEffect(() => {
         resetScores();
@@ -46,18 +44,23 @@ const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
         setSashimiScore(0);
         setMakiScore(0);
         setPuddingScore(0);
-        setRawScore(0);
         setSubmitted(false);
     };
 
     const handleSendScore = () => {
-        sendScores(playerId, rawScore, makiScore, puddingScore);
+        const individualRoundScore: IndividualRoundScore = {
+            playerId,
+            rawScore: total,
+            makiQty: makiScore,
+            puddingQty: puddingScore,
+        };
+        sendScores(individualRoundScore);
         setSubmitted(true);
     };
 
     return (
         <div className="score-container">
-            <ScoreCardHeader id={playerId} sendScore={handleSendScore} submitted={submitted} totalScore={rawScore} />
+            <ScoreCardHeader id={playerId} sendScore={handleSendScore} submitted={submitted} totalScore={total} />
             <div className="scorecard-items">
                 <Item {...items.eggNigiri} score={eggNigiriScore} setScore={setEggNigiriScore} />
                 <Item {...items.salmonNigiri} score={salmonNigiriScore} setScore={setSalmonNigiriScore} />

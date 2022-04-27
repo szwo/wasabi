@@ -7,12 +7,19 @@ import {
     CreatePlayerAction,
 } from 'providers/Scores/scores.actions';
 import useRound from './useRound';
+
+export interface IndividualRoundScore {
+    playerId: string;
+    rawScore: number;
+    makiQty: number;
+    puddingQty: number;
+}
 interface useScoresType {
     scores: ScoresState;
     getPlayers: () => Record<string, Player>;
     addMakiPoints: (totalPoints: number, winners: string[]) => void;
     createPlayer: (playerName: string) => void;
-    setIndividualScore: (playerId: string, rawScore: number, makiQty: number, puddingQty: number) => void;
+    setIndividualScore: (score: IndividualRoundScore) => void;
     totalRoundScores: () => void;
 }
 
@@ -73,7 +80,8 @@ const useScores = (): useScoresType => {
      * @param {number} makiQty Quantity of maki pieces collected during round
      * @param {number} puddingQty Quantity of pudding pieces collected during round
      */
-    const setIndividualScore = (playerId: string, rawScore: number, makiQty: number, puddingQty: number): void => {
+    const setIndividualScore = (scores: IndividualRoundScore): void => {
+        const { playerId, rawScore, makiQty, puddingQty } = scores;
         const action: SetScoreAction = {
             type: 'SET_SCORE',
             payload: {
