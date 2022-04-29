@@ -19,12 +19,14 @@ const Setup: FC<SetupProps> = (props: SetupProps) => {
     const isValidInput = alphanumericRegex.test(playerName);
 
     const handleCreatePlayer = () => {
-        if (players.includes(playerName)) {
-            displayToast('error', 'Name already taken!');
-        } else {
-            setPlayers(current => [...current, playerName]);
-            displayToast('success', `Welcome, ${playerName}!`);
-            setPlayerName('');
+        if (playerName.length) {
+            if (players.includes(playerName)) {
+                displayToast('error', 'Name already taken!');
+            } else {
+                setPlayers(current => [...current, playerName]);
+                displayToast('success', `Welcome, ${playerName}!`);
+                setPlayerName('');
+            }
         }
     };
 
