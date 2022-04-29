@@ -8,7 +8,7 @@ import './scoreCard.styles.scss';
 
 interface ScoreCardProps {
     playerId: string;
-    sendScores: (scores: IndividualRoundScore) => void;
+    sendScores: (playerId: string, scores: IndividualRoundScore) => void;
 }
 
 const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
@@ -22,8 +22,8 @@ const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
     const [dumplingScore, setDumplingScore] = useState(0);
     const [tempuraScore, setTempuraScore] = useState(0);
     const [sashimiScore, setSashimiScore] = useState(0);
-    const [makiScore, setMakiScore] = useState(0);
-    const [puddingScore, setPuddingScore] = useState(0);
+    const [makiQty, setMakiQty] = useState(0);
+    const [puddingQty, setPuddingQty] = useState(0);
     const [submitted, setSubmitted] = useState(false);
 
     const total = useMemo(
@@ -42,19 +42,19 @@ const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
         setDumplingScore(0);
         setTempuraScore(0);
         setSashimiScore(0);
-        setMakiScore(0);
-        setPuddingScore(0);
+        setMakiQty(0);
+        setPuddingQty(0);
         setSubmitted(false);
     };
 
     const handleSendScore = () => {
         const individualRoundScore: IndividualRoundScore = {
-            playerId,
             rawScore: total,
-            makiQty: makiScore,
-            puddingQty: puddingScore,
+            makiQty: makiQty,
+            makiScore: 0, // Temporarily set this to 0, may be recalculated later
+            puddingQty: puddingQty,
         };
-        sendScores(individualRoundScore);
+        sendScores(playerId, individualRoundScore);
         setSubmitted(true);
     };
 
@@ -68,8 +68,8 @@ const ScoreCard: FC<ScoreCardProps> = (props: ScoreCardProps) => {
                 <Item {...items.dumpling} score={dumplingScore} setScore={setDumplingScore} />
                 <Item {...items.tempura} score={tempuraScore} setScore={setTempuraScore} />
                 <Item {...items.sashimi} score={sashimiScore} setScore={setSashimiScore} />
-                <Item {...items.maki} score={makiScore} setScore={setMakiScore} />
-                <Item {...items.pudding} score={puddingScore} setScore={setPuddingScore} />
+                <Item {...items.maki} score={makiQty} setScore={setMakiQty} />
+                <Item {...items.pudding} score={puddingQty} setScore={setPuddingQty} />
             </div>
         </div>
     );
